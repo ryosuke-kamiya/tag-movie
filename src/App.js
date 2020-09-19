@@ -1,14 +1,15 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
+import { Top } from './Top/index.js';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        できた
-      </header>
-    </div>
-  );
+
+ return(
+   <Top>
+
+   </Top>
+ )
+
 }
 
 export default App;
