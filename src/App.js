@@ -1,13 +1,12 @@
 import React from 'react';
 import './App.scss';
-import { Top } from './Top/index.js';
+import { Routes } from './route.js';
 
 function App() {
 
- return(
-   <Top>
-
-   </Top>
+ return(//このrouteの上にproviderが必要なら書く
+   <Routes>
+   </Routes>
  )
 
 }

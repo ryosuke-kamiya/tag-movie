@@ -18,7 +18,7 @@ firebase.initializeApp(firebaseConfig);
 
 function Top() {
  
-  const [users, setUsers] = useState([]);
+  const [movies, setMovies] = useState([]);
   const [userName, setUsername] = useState('');
   const [age, setAge] = useState('');
   const [documentID, setDocumentID] = useState('');
@@ -26,12 +26,12 @@ function Top() {
   const handleClickFetchButton = async ()=> {
     const db = firebase.firestore();
     // document取得
-    // const doc = await db.collection('users').doc('FmppkTMVH6yPqWvUf9wf').get();
+    // const doc = await db.collection('movies').doc('FmppkTMVH6yPqWvUf9wf').get();
     // console.log('Document Data:' ,doc.data() );
 
     // collection取得
     const snapshot = await db
-    .collection('users')
+    .collection('movies')
     // .where('age', '<=' ,30)絞り込み
     // .limit(1)件数制限
     .get();
@@ -45,7 +45,7 @@ function Top() {
       });
     })
 
-    setUsers(_users);
+    setMovies(_users);
   };
 
   const handleClickAddButton = async () => {
@@ -65,14 +65,14 @@ function Top() {
 
     const db = firebase.firestore()
     // await db
-    // .collection('users')
+    // .collection('movies')
     // .doc('1')
     // .set({
     //   // name: "dammy",
     //   age: 99
     // },{merge: true});//第二引数のmergeで全体上書きを防ぎ、追加にする。
 
-    // const ref = await db.collection('users').add({
+    // const ref = await db.collection('movies').add({
     //   name: "田中",
     //   age: 100
     // })
@@ -80,7 +80,7 @@ function Top() {
     // const data = snapShot.data();
     // console.log(ref.id, data);
 
-    await db.collection('users').add({
+    await db.collection('movies').add({
       name: userName,
       age: age
     })
@@ -102,7 +102,7 @@ function Top() {
     }
     try{
       const db = firebase.firestore();
-      await db.collection('users').doc(documentID).update(newData);
+      await db.collection('movies').doc(documentID).update(newData);
       setUsername('')
       setAge('')
       setDocumentID('')
@@ -112,7 +112,7 @@ function Top() {
 
 
 
-    // await db.collection('users').doc('uQhbXB9RYSLTHhxG1zEs').update({
+    // await db.collection('movies').doc('uQhbXB9RYSLTHhxG1zEs').update({
     //   name: '田中でした',
     //   age: 33
     // })
@@ -120,7 +120,7 @@ function Top() {
 
   const handleClickDeleteButton = async () => {
     // const db = firebase.firestore();
-    // db.collection('users').doc('D6AcCpdUnuxNQNbrrhP0').delete().then(function () {
+    // db.collection('movies').doc('D6AcCpdUnuxNQNbrrhP0').delete().then(function () {
     //   console.log("Document successfully deleted")
     // }).catch(function (error) {
     //   console.error("error removing document :", error);
@@ -133,7 +133,7 @@ function Top() {
 
     try{
       const db = firebase.firestore();
-      await db.collection('users').doc(documentID).delete();
+      await db.collection('movies').doc(documentID).delete();
       setUsername('')
       setAge('')
       setDocumentID('')
@@ -142,7 +142,7 @@ function Top() {
     }
   }
 
-  const userListItems = users.map(user => {
+  const userListItems = movies.map(user => {
     return(
       <li key={user.userID}>
         <ul>
@@ -156,14 +156,14 @@ function Top() {
 
   useEffect(() => {
     const db = firebase.firestore();
-    const unsubscribe = db.collection('users').onSnapshot((querySnapshot) => {
+    const unsubscribe = db.collection('movies').onSnapshot((querySnapshot) => {
       const _users = querySnapshot.docs.map(doc => {
         return{
           userID: doc.id,
           ...doc.data()
         }
       });
-      setUsers(_users)
+      setMovies(_users)
     })
     return() => {
       unsubscribe();
@@ -172,7 +172,7 @@ function Top() {
 
   return (
     <div className="App">
-      <h1>bbbbbb</h1>
+      <h1>Top</h1>
       <div>
         <label htmlFor="username">username : </label>
         <input 
