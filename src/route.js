@@ -1,7 +1,7 @@
 import React from 'react';
-import { Top } from './Top/index';
+import { Top } from './page/Top/index';
 import { Route, Switch } from 'react-router';
-import { Registration } from './Registration';
+import { Registration } from './page/Registration';
 
 function Routes() {
 

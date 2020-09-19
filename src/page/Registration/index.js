@@ -1,8 +1,9 @@
 import React, { Fragment } from 'react';
+import Styles from '../../styles/index.scss';
 import './styles.scss';
 import * as firebase from 'firebase';
 import { useState } from 'react';
-import { useRouter } from '../hooks/useRouter'
+import { useRouter } from '../../hooks/useRouter'
 
 // var firebaseConfig = {
 //   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -86,7 +87,7 @@ function Registration() {
   }
 
   return (
-    <div className="Registration">
+    <div className='Registration'>
       <h1>registration</h1>
       <div>
         <label htmlFor="title">title : </label>

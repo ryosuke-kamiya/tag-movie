@@ -1,5 +1,5 @@
 import React from 'react';
-import Styles from'../App.scss';
+import Styles from '../../styles/index.scss';
 import * as firebase from 'firebase';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
@@ -137,7 +137,7 @@ function Top() {
   },[])//これでリアルタイム自動更新
 
   return (
-    <div className="Top">
+    <div className={Styles.Top}>
       <h1>Top</h1>
       <div>ここに検索フォーム作る</div>
       <Link to='/registration' >新規登録</Link>
