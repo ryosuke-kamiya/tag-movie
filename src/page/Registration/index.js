@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
-import Styles from '../../styles/index.scss';
-import './styles.scss';
+import styles from '../../styles/index.scss';
 import * as firebase from 'firebase';
 import { useState } from 'react';
 import { useRouter } from '../../hooks/useRouter'

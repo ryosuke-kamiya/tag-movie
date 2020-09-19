@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';//これなんや
 import * as serviceWorker from './serviceWorker';
 import App from './App';
 
-import './index.scss';
+import './styles/index.scss';
 
 const history = createBrowserHistory()
 
