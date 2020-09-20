@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
-import styles from '../../styles/index.scss';
+import React from 'react';
+// import styles from '../../styles/index.scss';
 import * as firebase from 'firebase';
 import { useState } from 'react';
 import { useRouter } from '../../hooks/useRouter'
 
-import { checkTag } from '../../_parts/tagList/tagList';
+import { checkTag } from '../../_parts/tagList/index';
+import { Header } from '../../_parts/Header/index';
 
 // var firebaseConfig = {
 //   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -72,6 +73,7 @@ function Registration() {
 
   return (
     <div className='Registration'>
+      <Header/>
       <h1>registration</h1>
       <div>
         <label htmlFor="title">title : </label>

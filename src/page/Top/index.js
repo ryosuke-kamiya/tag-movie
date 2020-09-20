@@ -5,7 +5,8 @@ import * as firebase from 'firebase';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { checkTag } from '../../_parts/tagList/tagList';
+import { checkTag } from '../../_parts/tagList/index';
+import { Header } from '../../_parts/Header/index';
 
 var firebaseConfig = {
   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -26,7 +27,7 @@ function Top() {
   const [title, setTitle] = useState('');
 
   const titleSearchButton = async ()=> {
-    if(title == '') return;
+    if(title === '') return;
     const db = firebase.firestore();
 
     // collection取得
@@ -89,7 +90,7 @@ function Top() {
 
   const resetSearchButton = () => {
     const db = firebase.firestore();
-    const unsubscribe = db.collection('movies').onSnapshot((querySnapshot) => {
+    db.collection('movies').onSnapshot((querySnapshot) => {
       const _movies = querySnapshot.docs.map(doc => {
         return{
           movieID: doc.id,
@@ -192,6 +193,7 @@ function Top() {
 
   return (
     <div className={cx('Top')}>
+      <Header/>
       <h1>Top</h1>
       <div>
         <div>
