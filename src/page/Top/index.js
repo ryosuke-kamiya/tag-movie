@@ -52,10 +52,6 @@ function Top() {
 
   const tagSearchButton = async ()=> {
     const db = firebase.firestore();
-    // document取得
-    // const doc = await db.collection('movies').doc('FmppkTMVH6yPqWvUf9wf').get();
-    // console.log('Document Data:' ,doc.data() );
-
     const tags = [];
     const tag = document.getElementsByName('tag');
 
@@ -68,11 +64,9 @@ function Top() {
       }
     }
 
-
-
     if(check === 0) return;
 
-    // collection取得
+    // 方法１配列使って、綺麗にゆるり検索
     const snapshot = await db
     .collection('movies')
     .where( 'tag', 'array-contains-any', tags)
@@ -90,7 +84,53 @@ function Top() {
 
     setMovies(_movies);
   };
-  
+
+  const tagAbsolutelySearchButton = async () => {
+    const db = firebase.firestore();
+    const tags = [];
+    const tag = document.getElementsByName('tag');
+
+    let check = 0;
+
+    for (let i = 0; i < tag.length; i++){
+      if(tag[i].checked){
+        tags.push(tag[i].value);
+        check++
+      }
+    }
+
+    if(check === 0) return;
+
+    const _movies = [];
+
+    //方法２ tagToSearchと言う、検索に表示させるタメだけのタグと同じ連想配列を作った。
+    let fun = false;
+    let you = false;
+    let hou = false;
+
+      for(let i = 0; i < tags.length; i++){
+        if(tags[i] === '面白い') fun = true;
+        if(tags[i] === '洋画') you = true;
+        if(tags[i] === '邦画') hou = true;
+      }
+
+      const snapshot = await db
+      .collection('movies')
+      .where( `tagToSearch.面白い`, '==', fun)//タグの数だけ追記
+      .where( `tagToSearch.洋画` , '==', you)//タグの数だけ追記
+      .where( `tagToSearch.邦画` , '==', hou)//タグの数だけ追記
+      .get();//チェックをつけていないものは、whereしたくない。これができないため断念。現状では、完全一致で表示。
+
+      snapshot.forEach(doc => {
+        _movies.push({
+          movieId: doc.id,
+          ...doc.data()
+        });
+      })
+
+    setMovies(_movies);
+  }
+
 
   const resetSearchButton = () => {
     const db = firebase.firestore();
@@ -168,7 +208,7 @@ function Top() {
         <li key={index}>
             <div>title : {movie.title}</div>
             {movie.tag &&
-            <div>
+            <div className='tags'>
                 <div>tag : </div>
                 <ul>{movie.tag.map((tag, index2) => (
                     <li key={index2}>{tag}</li>
@@ -212,7 +252,8 @@ function Top() {
         </div>
         <div>
          {checkTag}
-          <button onClick={()=>tagSearchButton()}>タグ検索</button>
+          <button onClick={()=>tagSearchButton()}>タグゆるり検索</button>
+          <button onClick={()=>tagAbsolutelySearchButton()}>タグ絶対検索</button>
         </div>
         <button onClick={()=>resetSearchButton()}>リセット</button>
       </div>
