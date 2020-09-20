@@ -1,10 +1,11 @@
 import React from 'react';
 import '../../styles/index.scss';
-// import './_style.scss';
 import cx from 'classnames';
 import * as firebase from 'firebase';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+
+import { checkTag } from '../../_parts/tagList/tagList';
 
 var firebaseConfig = {
   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -22,32 +23,84 @@ firebase.initializeApp(firebaseConfig);
 function Top() {
  
   const [movies, setMovies] = useState([]);
-//   const [title, setTitle] = useState();
+  const [title, setTitle] = useState('');
 
-//   const handleClickFetchButton = async ()=> {//これが検索フォームに使える！！！
-//     const db = firebase.firestore();
-//     // document取得
-//     // const doc = await db.collection('movies').doc('FmppkTMVH6yPqWvUf9wf').get();
-//     // console.log('Document Data:' ,doc.data() );
+  const titleSearchButton = async ()=> {
+    const db = firebase.firestore();
 
-//     // collection取得
-//     const snapshot = await db
-//     .collection('movies')
-//     // .where('age', '<=' ,30)絞り込み
-//     // .limit(1)件数制限
-//     .get();
+    // collection取得
+    const snapshot = await db
+    .collection('movies')
+    .where( 'title', '==', title)
+    .get();
 
-//     const _movies = [];
+    const _movies = [];
 
-//     snapshot.forEach(doc => {
-//       _movies.push({
-//         userID: doc.id,
-//         ...doc.data()
-//       });
-//     })
+    snapshot.forEach(doc => {
+      _movies.push({
+        movieId: doc.id,
+        ...doc.data()
+      });
+    })
 
-//     setMovies(_movies);
-//   };
+    setMovies(_movies);
+  };
+
+
+  const tagSearchButton = async ()=> {
+    const db = firebase.firestore();
+    // document取得
+    // const doc = await db.collection('movies').doc('FmppkTMVH6yPqWvUf9wf').get();
+    // console.log('Document Data:' ,doc.data() );
+
+    const tags = [];
+    const tag = document.getElementsByName('tag');
+
+    let check = 0;
+
+    for (let i = 0; i < tag.length; i++){
+      if(tag[i].checked){
+        tags.push(tag[i].value);
+        check++
+      }
+    }
+
+    if(check === 0) return;
+
+    // collection取得
+    const snapshot = await db
+    .collection('movies')
+    .where( 'tag', 'array-contains-any', tags)
+    // .limit(1)件数制限
+    .get();
+
+    const _movies = [];
+
+    snapshot.forEach(doc => {
+      _movies.push({
+        movieId: doc.id,
+        ...doc.data()
+      });
+    })
+
+    setMovies(_movies);
+  };
+
+  const resetSearchButton = () => {
+    const db = firebase.firestore();
+    const unsubscribe = db.collection('movies').onSnapshot((querySnapshot) => {
+      const _movies = querySnapshot.docs.map(doc => {
+        return{
+          movieID: doc.id,
+          ...doc.data()
+        }
+      });
+      setMovies(_movies)
+    })
+    return() => {
+      unsubscribe();
+    }
+  }
 
 //   const handleClickUpdateButton = async () => {
 
@@ -127,7 +180,7 @@ function Top() {
     const unsubscribe = db.collection('movies').onSnapshot((querySnapshot) => {
       const _movies = querySnapshot.docs.map(doc => {
         return{
-          userID: doc.id,
+          movieID: doc.id,
           ...doc.data()
         }
       });
@@ -141,7 +194,23 @@ function Top() {
   return (
     <div className={cx('Top')}>
       <h1>Top</h1>
-      <div>ここに検索フォーム作る</div>
+      <div>
+        <div>
+          <label htmlFor="title">タイトル : </label>
+          <input 
+            type="text"
+            id="title"
+            value={title}
+            onChange={(event)=>{setTitle(event.target.value)}}
+          />
+          <button onClick={()=>titleSearchButton()}>タイトル検索</button>
+        </div>
+        <div>
+         {checkTag}
+          <button onClick={()=>tagSearchButton()}>タグ検索</button>
+        </div>
+        <button onClick={()=>resetSearchButton()}>リセット</button>
+      </div>
       <Link to='/registration' >新規登録</Link>
       <ul>
         {userListItems}
