@@ -6,6 +6,7 @@ import { useRouter } from '../../hooks/useRouter'
 
 import { checkTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
+import { Footer } from '../../_parts/Footer/index';
 
 // var firebaseConfig = {
 //   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -90,6 +91,7 @@ function Registration() {
       </div>
       <button onClick={handleClickAddButton}>追加</button>
       <button onClick={handleBack}>戻る</button>
+      <Footer/>
     </div>
   );
 }

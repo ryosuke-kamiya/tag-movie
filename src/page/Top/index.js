@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { checkTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
+import { Footer } from '../../_parts/Footer/index';
 
 var firebaseConfig = {
   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -67,6 +68,8 @@ function Top() {
       }
     }
 
+
+
     if(check === 0) return;
 
     // collection取得
@@ -87,6 +90,7 @@ function Top() {
 
     setMovies(_movies);
   };
+  
 
   const resetSearchButton = () => {
     const db = firebase.firestore();
@@ -216,6 +220,7 @@ function Top() {
       <ul>
         {userListItems}
       </ul>
+      <Footer/>
     </div>
   );
 }
