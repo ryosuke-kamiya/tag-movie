@@ -26,6 +26,7 @@ function Top() {
   const [title, setTitle] = useState('');
 
   const titleSearchButton = async ()=> {
+    if(title == '') return;
     const db = firebase.firestore();
 
     // collection取得
@@ -96,10 +97,8 @@ function Top() {
         }
       });
       setMovies(_movies)
+      setTitle('')
     })
-    return() => {
-      unsubscribe();
-    }
   }
 
 //   const handleClickUpdateButton = async () => {

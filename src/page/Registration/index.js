@@ -61,6 +61,8 @@ function Registration() {
       title: title,
       tag: tags
     })
+
+    setTitle('')
   }
 
   const handleBack = () => {
