@@ -1,6 +1,7 @@
 import React from 'react';
 import '../../styles/index.scss';
-import cx from 'classnames'
+// import './_style.scss';
+import cx from 'classnames';
 import * as firebase from 'firebase';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';

@@ -1,8 +1,2 @@
-@import './Top/style', './Registration/style'
-
-//１行で書くとエラーになる
-// ul{
-//     li{
-//         background-color: green;
-//     }
-// }
+@import './Top/_style';
+@import './Registration/_style';
