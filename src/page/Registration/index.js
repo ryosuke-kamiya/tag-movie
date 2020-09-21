@@ -47,15 +47,6 @@ function Registration() {
       }
     }
 
-    const tagToSearch = {};
-    for (let i = 0; i < tag.length; i++) {
-      tagToSearch[tag[i].value] = false;
-    }
-
-    for (let i = 0; i < tags.length; i++) {
-      tagToSearch[tags[i]] = true;
-    }
-
 
     const db = firebase.firestore()
     // await db
@@ -78,7 +69,6 @@ function Registration() {
       title: title,
       link: link,
       tag: tags,
-      tagToSearch: tagToSearch,
     })
 
     setTitle('')

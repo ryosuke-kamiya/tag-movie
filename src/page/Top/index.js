@@ -75,113 +75,50 @@ function Top() {
       return;
     }
 
-    // 方法１配列使って、綺麗にゆるり検索
-    db
+    const snapshot = await db
     .collection('movies')
     .where( 'tag', 'array-contains-any', tags)
     .orderBy('title')
     // .limit(pageNum)
-    .onSnapshot((querySnapshot) => {
-      const _movies = querySnapshot.docs.map(doc => {
-        return{
-          movieID: doc.id,
-          ...doc.data()
-        }
+    .get();
+
+
+    const _movies = [];
+
+    snapshot.forEach(doc => {
+      _movies.push({
+        movieId: doc.id,
+        ...doc.data()
       });
-      setMovies(_movies)
-      setSearch(true)
-    })
-  };
+    })//ここまでがstep1。これだと検索条件がガバガバなので、さらに厳しくしていきます。
 
-  const tagAbsolutelySearchButton = async () => {
-    const db = firebase.firestore();
-    const tags = [];
-    const tag = document.getElementsByName('tag');
+    const okList = [];//合格した配列の番号たちを取得して配列に格納できた！！天才かもしれない。
 
-    let check = 0;
 
-    for (let i = 0; i < tag.length; i++){
-      if(tag[i].checked){
-        tags.push(tag[i].value);
-        check++
+    for(let i = 0; i < _movies.length; i++){
+      let okCount = 0;
+      for(let n=0; n < _movies[i].tag.length; n++){
+        if(tags.includes(_movies[i].tag[n])){
+          okCount++;
+        }
+      }
+      if(tags.length === okCount){
+        // console.log("こいつ合格です。" + i);
+        okList.push(i)
       }
     }
 
-    if(check === 0) return;
-    const _movies = [];
+    const ok_movies = [];
 
-    //方法２ tagToSearchと言う、検索に表示させるタメだけのタグと同じ連想配列を作った。
-    let you = false;
-    let hou = false;
-    let cry = false;
-    let hor = false;
-    let ser = false;
-    let rau = false;
-    let fam = false;
-    let sei = false;
-    let lov = false;
-    let sas = false;
-    let ani = false;
-    let sf = false;
-    let real = false;
-    let mu = false;
-    let fan = false;
-    let sp = false;
-    let act = false;
-
-      for(let i = 0; i < tags.length; i++){
-        if(tags[i] === '洋画') you = true;
-        if(tags[i] === '邦画') hou = true;
-        if(tags[i] === '泣ける') cry = true;
-        if(tags[i] === 'ホラー') hor = true;
-        if(tags[i] === 'シリアス') ser = true;
-        if(tags[i] === '笑える') rau = true;
-        if(tags[i] === '家族') fam = true;
-        if(tags[i] === '青春') sei = true;
-        if(tags[i] === '恋愛') lov = true;
-        if(tags[i] === 'サスペンス') sas = true;
-        if(tags[i] === 'SF') sf = true;
-        if(tags[i] === '実写化') real = true;
-        if(tags[i] === 'ミュージカル') mu = true;
-        if(tags[i] === 'ファンタジー') fan = true;
-        if(tags[i] === 'スポーツ') sp = true;
-        if(tags[i] === 'アクション') act = true;
+      for(let i = 0; i < okList.length; i++){
+        let okNum = okList[i]
+        ok_movies.push(
+          _movies[okNum]
+        )
       }
-
-      const snapshot = await db
-      .collection('movies')
-      .where( `tagToSearch.洋画` , '==', you)//タグの数だけ追記
-      .where( `tagToSearch.邦画` , '==', hou)//タグの数だけ追記
-      .where( `tagToSearch.泣ける` , '==', cry)//タグの数だけ追記
-      .where( `tagToSearch.ホラー` , '==', hor)//タグの数だけ追記
-      .where( `tagToSearch.シリアス` , '==', ser)//タグの数だけ追記
-      .where( `tagToSearch.笑える` , '==', rau)//タグの数だけ追記
-      .where( `tagToSearch.家族` , '==', fam)//タグの数だけ追記
-      .where( `tagToSearch.青春` , '==', sei)//タグの数だけ追記
-      .where( `tagToSearch.恋愛` , '==', lov)//タグの数だけ追記
-      .where( `tagToSearch.サスペンス` , '==', sas)//タグの数だけ追記
-      .where( `tagToSearch.アニメ` , '==', ani)//タグの数だけ追記
-      .where( `tagToSearch.SF` , '==', sf)//タグの数だけ追記
-      .where( `tagToSearch.実写化` , '==', real)//タグの数だけ追記
-      .where( `tagToSearch.ミュージカル` , '==', mu)//タグの数だけ追記
-      .where( `tagToSearch.ファンタジー` , '==', fan)//タグの数だけ追記
-      .where( `tagToSearch.スポーツ` , '==', sp)//タグの数だけ追記
-      .where( `tagToSearch.アクション` , '==', act)//タグの数だけ追記
-      .orderBy('title')
-      // .limit(pageNum)
-      .get();//チェックをつけていないものは、whereしたくない。これができないため断念。現状では、完全一致で表示。
-
-      snapshot.forEach(doc => {
-        _movies.push({
-          movieId: doc.id,
-          ...doc.data()
-        });
-      })
-
-    setMovies(_movies);
-    setSearch(true);
-  }
-
+    setMovies(ok_movies)
+    setSearch(true)
+  };
 
   const resetSearchButton = () => {
     const db = firebase.firestore();
@@ -368,16 +305,7 @@ function Top() {
             <div className='tagsBox'>
               {checkTag}
             </div>
-            <div className='tagButtons'>
-              <div className='tagButton'>
-                <p>選択したタグが１つでもヒットしていれば表示</p>
-                <button onClick={()=>tagSearchButton()}>タグゆるり検索</button>
-              </div>
-              <div className='tagButton'>
-                <p>選択したタグが完全に一致していれば表示</p>
-                <button onClick={()=>tagAbsolutelySearchButton()}>タグ絶対検索</button>
-              </div>
-            </div>
+            <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
           </div>
           <div className='addMovieButtonWrapper'>

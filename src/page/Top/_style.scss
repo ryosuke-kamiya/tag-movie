@@ -103,22 +103,8 @@
             border-radius: 3px;
             }
         }
-
-        .tagButtons {
-            display: inline-block;
-
-            .tagButton {
-                display: flex;
-                padding-top: 10px;
-
-                p {
-                    line-height: 27px;
-                }
-
-                button {
-                    margin-left: 5px;
-                }
-            }
+        .resetButton {
+            margin-left: 10px;
         }
     }
 
@@ -215,7 +201,7 @@
         position: fixed;
         right: 20px;
         bottom: 40px;
-        background: #ef3f40;
+        background: burlywood;
         opacity: 0.6;
         border-radius: 50%;
 
