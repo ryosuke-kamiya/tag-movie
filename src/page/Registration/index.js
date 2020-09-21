@@ -22,33 +22,38 @@ import { Footer } from '../../_parts/Footer/index';
 // firebase.initializeApp(firebaseConfig);
 
 function Registration() {
- 
+
   const [title, setTitle] = useState('');
+  const [link, setLink] = useState('');
   const { history } = useRouter();
 
   const handleClickAddButton = async () => {
 
-    if( !title ){
+    if (!title) {
       alert('タイトルが空です');
+      return;
+    }
+    if (!link) {
+      alert('リンクが空です');
       return;
     }
 
     const tags = [];
     const tag = document.getElementsByName('tag');
 
-    for (let i = 0; i < tag.length; i++){
-      if(tag[i].checked){ //(tag[i].checked === true)と同じ
+    for (let i = 0; i < tag.length; i++) {
+      if (tag[i].checked) { //(tag[i].checked === true)と同じ
         tags.push(tag[i].value);
       }
     }
 
-    const tagToSearch={};
-    for(let i=0;i<tag.length;i++){
-      tagToSearch[tag[i].value]=false;
+    const tagToSearch = {};
+    for (let i = 0; i < tag.length; i++) {
+      tagToSearch[tag[i].value] = false;
     }
 
-    for(let i=0;i<tags.length;i++){
-      tagToSearch[tags[i]]=true;
+    for (let i = 0; i < tags.length; i++) {
+      tagToSearch[tags[i]] = true;
     }
 
 
@@ -71,11 +76,13 @@ function Registration() {
 
     await db.collection('movies').add({
       title: title,
+      link: link,
       tag: tags,
       tagToSearch: tagToSearch,
     })
 
     setTitle('')
+    setLink('')
   }
 
   const handleBack = () => {
@@ -85,7 +92,7 @@ function Registration() {
 
   return (
     <div className='Registration'>
-      <Header/>
+      <Header />
       <h1>registration</h1>
       <div>
         <label htmlFor="title">title : </label>
@@ -93,18 +100,25 @@ function Registration() {
           type="text"
           id="title"
           value={title}
-          onChange={(event)=>{setTitle(event.target.value)}}
+          onChange={(event) => { setTitle(event.target.value) }}
+        />
+        <label htmlFor="link">Amazon link : </label>
+        <input
+          type="url"
+          id="link"
+          value={link}
+          onChange={(event)=>{setLink(event.target.value)}}
         />
         <div>
-        <div>タグ一覧</div>
-        {checkTag}
+          <div>タグ一覧</div>
+          {checkTag}
         </div>
       </div>
       <button onClick={handleClickAddButton}>追加</button>
       <button onClick={handleBack}>戻る</button>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
 
-export {Registration};
+export { Registration };

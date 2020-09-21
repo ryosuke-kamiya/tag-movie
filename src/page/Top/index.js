@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import '../../styles/index.scss';
 import cx from 'classnames';
 import * as firebase from 'firebase';
@@ -26,6 +26,8 @@ function Top() {
  
   const [movies, setMovies] = useState([]);
   const [title, setTitle] = useState('');
+  const [search, setSearch] = useState(false);
+  const pageNum = 2;
 
   const titleSearchButton = async ()=> {
     if(title === '') return;
@@ -34,7 +36,9 @@ function Top() {
     // collection取得
     const snapshot = await db
     .collection('movies')
+    // .orderBy('title')これがあるとなぜかエラーになる
     .where( 'title', '==', title)
+    .limit(pageNum)
     .get();
 
     const _movies = [];
@@ -47,6 +51,7 @@ function Top() {
     })
 
     setMovies(_movies);
+    setSearch(true)
   };
 
 
@@ -67,22 +72,21 @@ function Top() {
     if(check === 0) return;
 
     // 方法１配列使って、綺麗にゆるり検索
-    const snapshot = await db
+    db
     .collection('movies')
     .where( 'tag', 'array-contains-any', tags)
-    // .limit(1)件数制限
-    .get();
-
-    const _movies = [];
-
-    snapshot.forEach(doc => {
-      _movies.push({
-        movieId: doc.id,
-        ...doc.data()
+    .orderBy('title')
+    // .limit(pageNum)
+    .onSnapshot((querySnapshot) => {
+      const _movies = querySnapshot.docs.map(doc => {
+        return{
+          movieID: doc.id,
+          ...doc.data()
+        }
       });
+      setMovies(_movies)
+      setSearch(true)
     })
-
-    setMovies(_movies);
   };
 
   const tagAbsolutelySearchButton = async () => {
@@ -119,6 +123,8 @@ function Top() {
       .where( `tagToSearch.面白い`, '==', fun)//タグの数だけ追記
       .where( `tagToSearch.洋画` , '==', you)//タグの数だけ追記
       .where( `tagToSearch.邦画` , '==', hou)//タグの数だけ追記
+      .orderBy('title')
+      // .limit(pageNum)
       .get();//チェックをつけていないものは、whereしたくない。これができないため断念。現状では、完全一致で表示。
 
       snapshot.forEach(doc => {
@@ -129,12 +135,13 @@ function Top() {
       })
 
     setMovies(_movies);
+    setSearch(true);
   }
 
 
   const resetSearchButton = () => {
     const db = firebase.firestore();
-    db.collection('movies').onSnapshot((querySnapshot) => {
+    db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
       const _movies = querySnapshot.docs.map(doc => {
         return{
           movieID: doc.id,
@@ -143,6 +150,7 @@ function Top() {
       });
       setMovies(_movies)
       setTitle('')
+      setSearch(false)
     })
   }
 
@@ -207,6 +215,7 @@ function Top() {
     return(
         <li key={index}>
             <div>title : {movie.title}</div>
+            <div><a href={movie.link} target="_blank" rel="noopener noreferrer" >リンク</a></div>
             {movie.tag &&
             <div className='tags'>
                 <div>tag : </div>
@@ -219,9 +228,67 @@ function Top() {
     )
   })
 
-  useEffect(() => {
+  const Pager = () => {
+    //ここ何とかしたいけど、function使わずにいけんの？？？
+    if(search) return (<ul><li></li></ul>);//検索時のページャーはいったん諦めた。
+    return(
+      <Fragment>
+        <ul>
+          <li onClick={()=> handleMovePage(1)}>1</li>
+          <li onClick={()=> handleMovePage(2)}>2</li>
+          <li onClick={()=> handleMovePage(3)}>3</li>
+          <li onClick={()=> handleMovePage(4)}>4</li>
+        </ul>
+        <p>力不足で、不要なページャーも出てます。。。</p>
+      </Fragment>
+    )
+  }
+
+  const handleMovePage = async (page) => {
     const db = firebase.firestore();
-    const unsubscribe = db.collection('movies').onSnapshot((querySnapshot) => {
+      if(page === 1){
+        db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
+          const _movies = querySnapshot.docs.map(doc => {
+            return{
+              movieID: doc.id,
+              ...doc.data()
+            }
+          });
+          setMovies(_movies)
+        })
+        return
+      }
+
+      const limit = (page - 1) * pageNum
+
+      const first = db.collection('movies').orderBy('title').limit(limit);
+  
+      const snapshot = await first.get();
+  
+      const last = snapshot.docs[snapshot.docs.length - 1];
+    
+      const newSnapshot = await db
+      .collection('movies')
+      .orderBy('title')
+      .startAfter(last.data().title)
+      .limit(pageNum)
+      .get();
+  
+      const _movies = [];
+      newSnapshot.forEach(doc => {
+        _movies.push({
+          movieId: doc.id,
+          ...doc.data()
+        });
+      })
+
+      setMovies(_movies);
+  }
+
+  useEffect(() => {
+
+    const db = firebase.firestore();
+    const unsubscribe = db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
       const _movies = querySnapshot.docs.map(doc => {
         return{
           movieID: doc.id,
@@ -233,7 +300,7 @@ function Top() {
     return() => {
       unsubscribe();
     }
-  },[])//これでリアルタイム自動更新
+  },[])
 
   return (
     <div className={cx('Top')}>
@@ -242,7 +309,7 @@ function Top() {
       <div>
         <div>
           <label htmlFor="title">タイトル : </label>
-          <input 
+          <input
             type="text"
             id="title"
             value={title}
@@ -253,7 +320,9 @@ function Top() {
         <div>
          {checkTag}
           <button onClick={()=>tagSearchButton()}>タグゆるり検索</button>
+          <p>選択したタグが一つでもヒットしていれば表示</p>
           <button onClick={()=>tagAbsolutelySearchButton()}>タグ絶対検索</button>
+          <p>選択したタグが完全に一致していれば表示</p>
         </div>
         <button onClick={()=>resetSearchButton()}>リセット</button>
       </div>
@@ -261,6 +330,7 @@ function Top() {
       <ul>
         {userListItems}
       </ul>
+      <Pager />
       <Footer/>
     </div>
   );
