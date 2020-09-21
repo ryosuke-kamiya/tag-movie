@@ -293,6 +293,8 @@ function Top() {
       <Header/>
         <div className={cx('Top')}>
           <div className='searchForm'>
+            <p>タグを選択して検索してください。</p>
+            <p>あなたの気分に合わせた今観たい映画を探します。</p>
             <div className='titleBox'>
               <input
                 type="text"

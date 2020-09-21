@@ -15,6 +15,7 @@
             background: #67c5ff;
             color: white;
             outline: none;
+            font-size: 16px;
         }
 
 
@@ -24,6 +25,8 @@
         }
 
         .titleBox {
+            margin-top: 10px;
+
             #title {
                 background: #ffffff;
                 height: 27px;
@@ -132,6 +135,10 @@
     .movieCards {
         display: flex;
         flex-wrap: wrap;
+        max-width: 1100px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 10px;
 
         .movieCard {
             margin: 10px;
@@ -140,6 +147,7 @@
             padding: 10px;
             border: 2px solid burlywood;
             border-radius: 3px;
+            box-sizing: border-box;
 
             & > * {
                 margin-top: 10px;
