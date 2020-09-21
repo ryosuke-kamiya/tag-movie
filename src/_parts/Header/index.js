@@ -6,7 +6,10 @@ const Header =()=> {
 
   return(
     <header>
-      <a href="/"><img className='headerLogo' src={logo} alt="movie tag"/></a>
+      <h1>
+        <a href="/"><img className='headerLogo' src={logo} alt="movie tag"/></a>
+      </h1>
+      <p>観たい映画を探しましょーー！！</p>
       {/* <a href="#">ログイン</a>
       <a href="#">新規登録</a>
       <a href="#">お問い合せ</a> */}

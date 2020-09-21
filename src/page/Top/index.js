@@ -70,6 +70,10 @@ function Top() {
     }
 
     if(check === 0) return;
+    if(check > 9){
+      alert('タグゆるり検索は10以上のタグを同時に検索できません。')
+      return;
+    }
 
     // 方法１配列使って、綺麗にゆるり検索
     db
@@ -104,7 +108,6 @@ function Top() {
     }
 
     if(check === 0) return;
-console.log("ato");
     const _movies = [];
 
     //方法２ tagToSearchと言う、検索に表示させるタメだけのタグと同じ連想配列を作った。
@@ -174,7 +177,7 @@ console.log("ato");
           ...doc.data()
         });
       })
-console.log("name");
+
     setMovies(_movies);
     setSearch(true);
   }
@@ -193,6 +196,14 @@ console.log("name");
       setTitle('')
       setSearch(false)
     })
+
+    const tag = document.getElementsByName('tag');
+
+    for (let i = 0; i < tag.length; i++){
+      if(tag[i].checked){
+        tag[i].checked = false
+      }
+    }
   }
 
 //   const handleClickUpdateButton = async () => {
@@ -254,16 +265,13 @@ console.log("name");
   const userListItems = movies.map((movie, index) => {
 
     return(
-        <li key={index}>
-            <div>title : {movie.title}</div>
-            <div><a href={movie.link} target="_blank" rel="noopener noreferrer" >リンク</a></div>
+        <li key={index} className='movieCard'>
+            <div>{movie.title}</div>
+            <a href={movie.link} className='movieLinkButton' target="_blank" rel="noopener noreferrer" >リンク</a>
             {movie.tag &&
-            <div className='tags'>
-                <div>tag : </div>
-                <ul>{movie.tag.map((tag, index2) => (
-                    <li key={index2}>{tag}</li>
-                ))}</ul>
-            </div>
+              <ul className='tags'>{movie.tag.map((tag, index2) => (
+                  <li key={index2} className='tag'>{tag}</li>
+              ))}</ul>
             }
         </li>
     )
@@ -274,11 +282,11 @@ console.log("name");
     if(search) return (<ul><li></li></ul>);//検索時のページャーはいったん諦めた。
     return(
       <Fragment>
-        <ul>
-          <li onClick={()=> handleMovePage(1)}>1</li>
-          <li onClick={()=> handleMovePage(2)}>2</li>
-          <li onClick={()=> handleMovePage(3)}>3</li>
-          <li onClick={()=> handleMovePage(4)}>4</li>
+        <ul className='pagerList'>
+          <li className='pager' onClick={()=> handleMovePage(1)}>1</li>
+          <li className='pager' onClick={()=> handleMovePage(2)}>2</li>
+          <li className='pager' onClick={()=> handleMovePage(3)}>3</li>
+          <li className='pager' onClick={()=> handleMovePage(4)}>4</li>
         </ul>
         <p>力不足で、不要なページャーも出てます。。。</p>
       </Fragment>
@@ -344,36 +352,45 @@ console.log("name");
   },[])
 
   return (
-    <div className={cx('Top')}>
+    <Fragment>
       <Header/>
-      <h1>Top</h1>
-      <div>
-        <div>
-          <label htmlFor="title">タイトル : </label>
-          <input
-            type="text"
-            id="title"
-            value={title}
-            onChange={(event)=>{setTitle(event.target.value)}}
-          />
-          <button onClick={()=>titleSearchButton()}>タイトル検索</button>
+        <div className={cx('Top')}>
+          <div className='searchForm'>
+            <div className='titleBox'>
+              <input
+                type="text"
+                id="title"
+                value={title}
+                onChange={(event)=>{setTitle(event.target.value)}}
+              />
+              <button onClick={()=>titleSearchButton()}>タイトル検索</button>
+            </div>
+            <div className='tagsBox'>
+              {checkTag}
+            </div>
+            <div className='tagButtons'>
+              <div className='tagButton'>
+                <p>選択したタグが１つでもヒットしていれば表示</p>
+                <button onClick={()=>tagSearchButton()}>タグゆるり検索</button>
+              </div>
+              <div className='tagButton'>
+                <p>選択したタグが完全に一致していれば表示</p>
+                <button onClick={()=>tagAbsolutelySearchButton()}>タグ絶対検索</button>
+              </div>
+            </div>
+            <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
+          </div>
+          <div className='addMovieButtonWrapper'>
+            <Link to='/registration' className='addMovieButton' >新規登録</Link>
+          </div>
+          <ul className="movieCards">
+            {userListItems}
+          </ul>
+          <Pager />
+          <div className='page-top'><a href="#">▲</a></div>
         </div>
-        <div>
-         {checkTag}
-          <button onClick={()=>tagSearchButton()}>タグゆるり検索</button>
-          <p>選択したタグが一つでもヒットしていれば表示</p>
-          <button onClick={()=>tagAbsolutelySearchButton()}>タグ絶対検索</button>
-          <p>選択したタグが完全に一致していれば表示</p>
-        </div>
-        <button onClick={()=>resetSearchButton()}>リセット</button>
-      </div>
-      <Link to='/registration' >新規登録</Link>
-      <ul>
-        {userListItems}
-      </ul>
-      <Pager />
       <Footer/>
-    </div>
+    </Fragment>
   );
 }
 

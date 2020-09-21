@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 // import styles from '../../styles/index.scss';
 import * as firebase from 'firebase';
 import { useState } from 'react';
@@ -91,33 +91,41 @@ function Registration() {
   }
 
   return (
-    <div className='Registration'>
+    <Fragment>
       <Header />
-      <h1>registration</h1>
-      <div>
-        <label htmlFor="title">title : </label>
-        <input
-          type="text"
-          id="title"
-          value={title}
-          onChange={(event) => { setTitle(event.target.value) }}
-        />
-        <label htmlFor="link">Amazon link : </label>
-        <input
-          type="url"
-          id="link"
-          value={link}
-          onChange={(event)=>{setLink(event.target.value)}}
-        />
-        <div>
-          <div>タグ一覧</div>
-          {checkTag}
+      <div className='Registration'>
+        <h2>映画の新規登録</h2>
+        <div className='registrationForm'>
+          <div className='titleBox'>
+            <label htmlFor="title">title : </label>
+            <input
+              type="text"
+              id="title"
+              value={title}
+              onChange={(event) => { setTitle(event.target.value) }}
+            />
+          </div>
+          <div className='linkBox'>
+            <label htmlFor="link">Amazon link : </label>
+            <input
+              type="url"
+              id="link"
+              value={link}
+              onChange={(event)=>{setLink(event.target.value)}}
+            />
+          </div>
+          <div>
+            <div>タグ一覧</div>
+            {checkTag}
+          </div>
+        </div>
+        <div className='buttons'>
+          <button onClick={handleClickAddButton}>追加</button>
+          <button onClick={handleBack}>戻る</button>
         </div>
       </div>
-      <button onClick={handleClickAddButton}>追加</button>
-      <button onClick={handleBack}>戻る</button>
       <Footer />
-    </div>
+    </Fragment>
   );
 }
 

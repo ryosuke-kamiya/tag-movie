@@ -1,3 +1,4 @@
-@import '../page/_rootStyle';
-@import '../_parts/_style';
 @import './_reset';
+@import './_base';
+@import '../_parts/_style';
+@import '../page/_rootStyle';

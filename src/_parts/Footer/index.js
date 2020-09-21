@@ -5,7 +5,7 @@ const Footer =()=> {
 
   return(
     <footer>
-      フッター
+      {/* フッター */}
     </footer>
   )
 }

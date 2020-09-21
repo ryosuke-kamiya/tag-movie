@@ -1,8 +1,265 @@
 .Top {
-    ul{
-        background-color: aqua;
+    text-align: center;
+
+    .searchForm{
+        background-color: burlywood;
+        padding: 20px;
+
+        button {
+            display: inline-block;
+            padding: 0 5px;
+            text-decoration: none;
+            border: solid 2px #67c5ff;
+            border-radius: 3px;
+            transition: .25s all ease;
+            background: #67c5ff;
+            color: white;
+            outline: none;
+        }
+
+
+        button:hover {
+            color: #67c5ff;
+            background: white;
+        }
+
+        .titleBox {
+            #title {
+                background: #ffffff;
+                height: 27px;
+                padding: 0 10px;
+                border: 1px solid #67c5ff;
+                box-sizing: border-box;
+                border-radius: 3px;
+                margin: 0;
+                outline: none;
+            }
+
+            button {
+                margin-left: 5px;
+            }
+        }
+
+        .tagsBox {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 20px;
+
+            .tagBox {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+            }
+
+            input[type=checkbox]{
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+            }
+
+            label {
+            position: relative;
+            margin-right: 1em;
+            padding-left: 2em;
+            padding-right: 2em;
+            line-height: 2;
+            background-color: white;
+            border-radius: 3px;
+            color: black;
+            cursor: pointer;
+
+                &:before {
+                    box-sizing: border-box;
+                    content: " ";
+                    position: absolute;
+                    top: 0.3em;
+                    left: 0;
+                    display: block;
+                    width: 1.4em;
+                    height: 1.4em;
+                    border: 2px solid white;
+                    border-radius: .25em;
+                    z-index: -1;
+                }
+            }
+            /* Checked */
+            input[type=checkbox]:checked + label {
+                color: white;
+                background-color: #5298EB;
+                &:before {
+                    top: 0;
+                    width: 100%;
+                    height: 2em;
+                    background: #5298EB;
+                }
+            }
+
+            /* Transition */
+            label,
+            label::before {
+            -webkit-transition: .25s all ease;
+            -o-transition: .25s all ease;
+            transition: .25s all ease;
+            border-radius: 3px;
+            }
+        }
+
+        .tagButtons {
+            display: inline-block;
+
+            .tagButton {
+                display: flex;
+                padding-top: 10px;
+
+                p {
+                    line-height: 27px;
+                }
+
+                button {
+                    margin-left: 5px;
+                }
+            }
+        }
     }
-    .tags {
-        margin: 20px;
+
+    .addMovieButtonWrapper {
+        text-align: right;
+        padding: 10px 20px;
+
+        .addMovieButton {
+            display: inline-block;
+            padding: 0.3em 1em;
+            text-decoration: none;
+            border: solid 2px #67c5ff;
+            border-radius: 3px;
+            transition: .25s all ease;
+            background: #67c5ff;
+            color: white;
+        }
+
+        .addMovieButton:hover {
+            color: #67c5ff;
+            background: white;
+        }
+    }
+
+    .movieCards {
+        display: flex;
+        flex-wrap: wrap;
+
+        .movieCard {
+            margin: 10px;
+            width: 200px;
+            min-height: 200px;
+            padding: 10px;
+            border: 2px solid burlywood;
+            border-radius: 3px;
+
+            & > * {
+                margin-top: 10px;
+
+            }
+
+            .movieLinkButton {
+                display: inline-block;
+                padding: 0.3em 1em;
+                text-decoration: none;
+                border: solid 2px #51BD65;
+                border-radius: 3px;
+                transition: .25s all ease;
+                background: #51BD65;
+                color: white;
+            }
+    
+            .movieLinkButton:hover {
+                color: #51BD65;
+                background: white;
+            }
+
+            .tags {
+                display: flex;
+                flex-wrap: wrap;
+
+                .tag {
+                    display: inline-block;
+                    padding: 5px;
+                    margin-right: 5px;
+                    margin-top: 5px;
+                    border: solid 2px #B8B8B8;
+                    border-radius: 3px;
+                    transition: .25s all ease;
+                    background: #B8B8B8;
+                    color: white;
+                }
+            }
+        }
+    }
+
+    .pagerList {
+        display: flex;
+        justify-content: center;
+
+        .pager {
+            display: inline-block;
+            padding: 7px;
+            margin-right: 5px;
+            border-radius: 3px;
+            background: #B8B8B8;
+            color: white;
+            cursor: pointer;
+        }
+    }
+    .page-top{
+        width: 50px;
+        height: 50px;
+        position: fixed;
+        right: 20px;
+        bottom: 40px;
+        background: #ef3f40;
+        opacity: 0.6;
+        border-radius: 50%;
+
+        a {
+            color: white;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+
+@include sp {
+    .Top {
+        .searchForm {
+            .tagsBox {
+                label {
+                    padding-left: 7px;
+                    padding-right: 7px;
+                }
+            }
+
+            .tagButton {
+                flex-direction: column;
+
+                button {
+                    height: 30px;
+                }
+
+                p {
+                    text-align: left;
+                }
+            }
+
+            .resetButton {
+                display: block;
+                margin: 10px auto 0;
+                height: 30px;
+            }
+
+            button {
+                font-size: 14px;
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 // import styles from '../../styles/index.scss';
 
 
@@ -26,15 +26,15 @@ const tagList = [
 const checkTag = tagList.map((tag, index) => {
 
   return(
-    <Fragment key={index}>
-      <label htmlFor={tag.id}>{tag.value}:</label>
+    <div key={index} className='tagBox'>
       <input
         type="checkbox"
         name='tag'
         id={tag.id}
         value={tag.value}
       />
-    </Fragment>
+      <label htmlFor={tag.id}>{tag.value}</label>
+    </div>
   )
 })
 
