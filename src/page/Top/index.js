@@ -27,6 +27,7 @@ function Top() {
   const [movies, setMovies] = useState([]);
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
+  const [allData, setAllData] = useState([]);
   const pageNum = 10;
 
   const titleSearchButton = async ()=> {
@@ -217,15 +218,24 @@ function Top() {
   const Pager = () => {
     //ここ何とかしたいけど、function使わずにいけんの？？？
     if(search) return (<ul><li></li></ul>);//検索時のページャーはいったん諦めた。
+
+    let arrayI = [];
+
+    for(let i = 0; i < Math.ceil(allData.length/pageNum); i++){
+      arrayI.push(i)
+    }
+
     return(
       <Fragment>
         <ul className='pagerList'>
-          <li className='pager' onClick={()=> handleMovePage(1)}>1</li>
-          <li className='pager' onClick={()=> handleMovePage(2)}>2</li>
-          <li className='pager' onClick={()=> handleMovePage(3)}>3</li>
-          <li className='pager' onClick={()=> handleMovePage(4)}>4</li>
+        {
+          arrayI.map((page, index) => {
+            return(
+              <li className='pager' key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
+            )
+          })
+        }
         </ul>
-        <p>力不足で、不要なページャーも出てます。。。</p>
       </Fragment>
     )
   }
@@ -282,6 +292,16 @@ function Top() {
         }
       });
       setMovies(_movies)
+    })
+    
+    db.collection('movies').onSnapshot((querySnapshot) => {
+      const _allData = querySnapshot.docs.map(doc => {
+        return{
+          movieID: doc.id,
+          ...doc.data()
+        }
+      });
+      setAllData(_allData)
     })
     return() => {
       unsubscribe();
