@@ -51,22 +51,6 @@
     .addMovieButtonWrapper {
         text-align: right;
         padding: 10px 20px;
-
-        .addMovieButton {
-            display: inline-block;
-            padding: 0.3em 1em;
-            text-decoration: none;
-            border: solid 2px #67c5ff;
-            border-radius: 3px;
-            transition: .25s all ease;
-            background: #67c5ff;
-            color: white;
-        }
-
-        .addMovieButton:hover {
-            color: #67c5ff;
-            background: white;
-        }
     }
 
     .movieCards {

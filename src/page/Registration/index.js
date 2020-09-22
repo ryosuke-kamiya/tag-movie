@@ -7,6 +7,7 @@ import { useRouter } from '../../hooks/useRouter'
 import { CheckTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
 import { Footer } from '../../_parts/Footer/index';
+import { BlueButton } from '../../_parts/BlueButton/index';
 
 // var firebaseConfig = {
 //   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -26,7 +27,6 @@ function Registration() {
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
   const { history } = useRouter();
-  const [tagList, setTagList] = useState([]);
 
   const handleClickAddButton = async () => {
 
@@ -111,8 +111,14 @@ function Registration() {
           </div>
         </div>
         <div className='buttons'>
-          <button onClick={handleClickAddButton}>追加</button>
-          <button onClick={handleBack}>戻る</button>
+          <BlueButton
+              text='追加'
+              onClick={handleClickAddButton}
+            />
+          <BlueButton
+            text='戻る'
+            onClick={handleBack}
+          />
         </div>
       </div>
       <Footer />

@@ -2,11 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react';
 import '../../styles/index.scss';
 import cx from 'classnames';
 import * as firebase from 'firebase';
-import { Link } from 'react-router-dom';
 
 import { CheckTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
 import { Footer } from '../../_parts/Footer/index';
+import { BlueButton } from '../../_parts/BlueButton/index';
 
 var firebaseConfig = {
   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -22,7 +22,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 function Top() {
-console.log("name");
+
   const [movies, setMovies] = useState([]);
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
@@ -265,7 +265,7 @@ console.log("name");
   }
 
   const handleMovePage = async (page) => {
-    console.log('handlemove')
+
     const db = firebase.firestore();
       if(page === 1){
         db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
@@ -356,8 +356,14 @@ console.log("name");
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
           </div>
           <div className='addMovieButtonWrapper'>
-            <Link to='/registration' className='addMovieButton' >新規登録</Link>
-            <Link to='/tagRegistration' className='addTagButton' >新規タグ追加</Link>
+            <BlueButton
+              text='新規登録'
+              link='/registration'
+            />
+            <BlueButton
+              text='新規タグ追加'
+              link='/tagRegistration'
+            />
           </div>
           <ul className="movieCards">
             {userListItems}

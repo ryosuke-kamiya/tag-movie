@@ -3,17 +3,19 @@ import PropTypes from "prop-types";
 // import styles from '../../styles/index.scss';
 
 const BlueButton =(props)=> {
-  const { text } = props
+  const { text, link, onClick } = props
 
   return(
-    <div>
+    <a className="blueButton" onClick={onClick} href={link}>
       {text}
-    </div>
+    </a>
   )
 }
 
 BlueButton.propTypes = {
   text: PropTypes.string,
+  link: PropTypes.string,
+  onClick: PropTypes.func,
 }
 
 export { BlueButton };

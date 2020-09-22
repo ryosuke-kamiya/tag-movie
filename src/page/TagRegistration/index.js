@@ -7,6 +7,7 @@ import { useRouter } from '../../hooks/useRouter'
 import { CheckTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
 import { Footer } from '../../_parts/Footer/index';
+import { BlueButton } from '../../_parts/BlueButton/index';
 
 function TagRegistration() {
   const [addTag, setAddTag] = useState('');
@@ -42,16 +43,20 @@ function TagRegistration() {
               />
             </div>
           </div>
-        <div className='buttons'>
-          <button onClick={handleClickAddButton}>追加</button>
-          <button onClick={handleBack}>戻る</button>
-        </div>
+          <BlueButton
+              text='追加'
+              onClick={handleClickAddButton}
+            />
         <div>
           <div>タグ一覧</div>
           <CheckTag
             disabled={true}
           />
         </div>
+        <BlueButton
+          text='戻る'
+          onClick={handleBack}
+        />
       </div>
       <Footer />
     </Fragment>

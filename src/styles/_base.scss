@@ -5,6 +5,10 @@ button, label, input[type=checkbox] {
 
 body {
     font-family: 'Noto Sans JP', sans-serif;
+
+    h2 {
+        font-size: 20px;
+    }
 }
 
 @mixin sp {
