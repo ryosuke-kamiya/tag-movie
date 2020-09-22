@@ -229,9 +229,9 @@ function Top() {
     if(!search){
       let arrayAllPage = [];
 
-      const loopNum = Math.ceil(allData.length/pageNum);
+      // const loopNum = Math.ceil(allData.length/pageNum);//本当はここのコメントアウトもとる。
 
-      for(let i = 0; i < loopNum; i++){
+      for(let i = 0; i < 8; i++){// for(let i = 0; i < loopNum; i++){ 本当は、こうだけど、一時的にページャーが無限に増えるので８にした。
         arrayAllPage.push(i)
       }
   
