@@ -24,15 +24,15 @@
     }
 
     label {
-    position: relative;
-    margin-right: 1em;
-    padding-left: 2em;
-    padding-right: 2em;
-    line-height: 2;
-    background-color: white;
-    border-radius: 3px;
-    color: black;
-    cursor: pointer;
+        position: relative;
+        margin-right: 1em;
+        padding-left: 1em;
+        padding-right: 1em;
+        line-height: 2;
+        background-color: white;
+        border-radius: 3px;
+        color: black;
+        cursor: pointer;
 
         &:before {
             box-sizing: border-box;
