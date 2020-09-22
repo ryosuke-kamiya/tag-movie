@@ -9,19 +9,6 @@ import { Header } from '../../_parts/Header/index';
 import { Footer } from '../../_parts/Footer/index';
 import { BlueButton } from '../../_parts/BlueButton/index';
 
-// var firebaseConfig = {
-//   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
-//   authDomain: "tag-movie.firebaseapp.com",
-//   databaseURL: "https://tag-movie.firebaseio.com",
-//   projectId: "tag-movie",
-//   storageBucket: "tag-movie.appspot.com",
-//   messagingSenderId: "970472171001",
-//   appId: "1:970472171001:web:718d629dce05e23ceac928",
-//   measurementId: "G-8RP1E25KXL"
-// };
-
-// firebase.initializeApp(firebaseConfig);
-
 function Registration() {
 
   const [title, setTitle] = useState('');
@@ -46,6 +33,26 @@ function Registration() {
       return;
     }
 
+    const db = firebase.firestore();
+
+    const snapshot = await db
+    .collection('movies')
+    .where( 'title', '==', title)
+    .get();
+
+    const sameTitle = [];
+
+    snapshot.forEach(doc => {
+      sameTitle.push({
+        movieId: doc.id,
+      });
+    })
+
+    if(sameTitle.length >= 1){
+      alert('同名の映画が登録されています。');
+      return;
+    }
+
     const tags = [];
     const tag = document.getElementsByName('tag');
 
@@ -56,7 +63,6 @@ function Registration() {
     }
 
 
-    const db = firebase.firestore()
     // await db
     // .collection('movies')
     // .doc('1')

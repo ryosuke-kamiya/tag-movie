@@ -20,6 +20,10 @@
 
         & + label{
             cursor: default;
+
+            &:hover {
+                background-color: white;
+            }
         }
     }
 
@@ -33,6 +37,10 @@
         border-radius: 3px;
         color: black;
         cursor: pointer;
+
+        &:hover {
+            background-color: #E6E6E6;
+        }
 
         &:before {
             box-sizing: border-box;

@@ -27,6 +27,7 @@ function Top() {
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(1)
   // const [searchAllData, setSearchAllData] = useState([]);
   const pageNum = 10;
 
@@ -237,13 +238,29 @@ function Top() {
       return(
         <Fragment>
           <ul className='pagerList'>
+            <li className={cx('pager', {
+                  'pagerDisabled': currentIndex <= 1
+                })}
+              onClick={() => {
+                if(currentIndex <= 1) return;
+                handleMovePage(currentIndex - 1)
+              }}
+              >＜</li>
           {
             arrayAllPage.map((page, index) => {
               return(
-                <li className='pager' key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
+                <li className={cx('pager', {'currentPage': currentIndex === page + 1})} key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
               )
             })
           }
+          <li className={cx('pager', {
+                'pagerDisabled': currentIndex >= arrayAllPage.pop() + 1
+              })}
+              onClick={() => {
+                if(currentIndex > arrayAllPage.pop() + 1) return;//うまくいってるけどなんでや。これだと一歩手前で止まらんのか、謎。
+                handleMovePage(currentIndex + 1)
+              }}
+              >＞</li>
           </ul>
         </Fragment>
       )
@@ -277,6 +294,7 @@ function Top() {
           });
           setMovies(_movies)
         })
+        setCurrentIndex(page)
         return
       }
 
@@ -304,6 +322,7 @@ function Top() {
       })
 
       setMovies(_movies);
+      setCurrentIndex(page)
   }
 
 
