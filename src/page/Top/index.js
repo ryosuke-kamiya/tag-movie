@@ -355,7 +355,7 @@ function Top() {
             <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
           </div>
-          <div className='addMovieButtonWrapper'>
+          <div className='addButtonWrapper'>
             <BlueButton
               text='新規登録'
               link='/registration'
