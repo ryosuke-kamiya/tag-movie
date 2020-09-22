@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import '../../styles/index.scss';
 import cx from 'classnames';
 import * as firebase from 'firebase';
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
-import { checkTag } from '../../_parts/tagList/index';
+import { CheckTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
 import { Footer } from '../../_parts/Footer/index';
 
@@ -28,6 +27,7 @@ function Top() {
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [allData, setAllData] = useState([]);
+  const [tagList, setTagList] = useState([]);
   // const [searchAllData, setSearchAllData] = useState([]);
   const pageNum = 10;
 
@@ -303,6 +303,7 @@ function Top() {
       setMovies(_movies);
   }
 
+
   useEffect(() => {
 
     const db = firebase.firestore();
@@ -346,14 +347,16 @@ function Top() {
               />
               <button onClick={()=>titleSearchButton()}>タイトル検索</button>
             </div>
-            <div className='tagsBox'>
-              {checkTag}
-            </div>
+              <CheckTag
+                setTagList={setTagList}
+                tagList={tagList}
+              />
             <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
           </div>
           <div className='addMovieButtonWrapper'>
             <Link to='/registration' className='addMovieButton' >新規登録</Link>
+            <Link to='/tagRegistration' className='addTagButton' >新規タグ追加</Link>
           </div>
           <ul className="movieCards">
             {userListItems}

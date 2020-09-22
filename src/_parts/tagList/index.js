@@ -1,41 +1,58 @@
 import React from 'react';
 // import styles from '../../styles/index.scss';
+import * as firebase from 'firebase';
 
+// const [tagList, setTagList] = useState([]);使うときは親の方にこれを追加してくだせぇ
+const CheckTag =(props)=> {
+  const {tagList, setTagList, disabled} = props
+  const db = firebase.firestore();
+  db.collection('tagList').onSnapshot((querySnapshot) => {
+    const _tagList = querySnapshot.docs.map(doc => {
+      return{
+        ...doc.data()
+      }
+    });
+    setTagList(_tagList)
+  })
 
-const tagList = [ 
-{value : '洋画', id : 'you'}, 
-{value : '邦画', id : 'hou'},
-{value : '泣ける', id : 'cry'},
-{value : 'ホラー', id : 'hor'},
-{value : 'シリアス', id : 'ser'},
-{value : '笑える', id : 'rau'},
-{value : '家族', id : 'fam'},
-{value : '青春', id : 'sei'},
-{value : '恋愛', id : 'lov'},
-{value : 'サスペンス', id : 'sas'},
-{value : 'アニメ', id : 'ani'},
-{value : 'SF', id : 'sf'},
-{value : '実写化', id : 'real'},
-{value : 'ミュージカル', id : 'mu'},
-{value : 'ファンタジー', id : 'fan'},
-{value : 'スポーツ', id : 'sp'},
-{value : 'アクション', id : 'act'},
-]
+  if(disabled){
+    return(
+      <div className='tagsBox'>
+      {tagList.map((tag, index) => {
+        return(
+          <div key={index} className='tagBox'>
+            <input
+              type="checkbox"
+              name='tag'
+              id={'tag' + index}
+              value={tag.tag}
+              disabled='disabled'
+            />
+            <label htmlFor={'tag' + index}>{tag.tag}</label>
+          </div>
+        )
+      })}
+      </div>
+    )
+  }else{
+    return(
+      <div className='tagsBox'>
+      {tagList.map((tag, index) => {
+        return(
+          <div key={index} className='tagBox'>
+            <input
+              type="checkbox"
+              name='tag'
+              id={'tag' + index}
+              value={tag.tag}
+            />
+            <label htmlFor={'tag' + index}>{tag.tag}</label>
+          </div>
+        )
+      })}
+      </div>
+    )
+  }
+}
 
-
-const checkTag = tagList.map((tag, index) => {
-
-  return(
-    <div key={index} className='tagBox'>
-      <input
-        type="checkbox"
-        name='tag'
-        id={tag.id}
-        value={tag.value}
-      />
-      <label htmlFor={tag.id}>{tag.value}</label>
-    </div>
-  )
-})
-
-export {checkTag};
+export { CheckTag };

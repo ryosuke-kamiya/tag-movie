@@ -4,7 +4,7 @@ import * as firebase from 'firebase';
 import { useState } from 'react';
 import { useRouter } from '../../hooks/useRouter'
 
-import { checkTag } from '../../_parts/tagList/index';
+import { CheckTag } from '../../_parts/tagList/index';
 import { Header } from '../../_parts/Header/index';
 import { Footer } from '../../_parts/Footer/index';
 
@@ -26,6 +26,7 @@ function Registration() {
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
   const { history } = useRouter();
+  const [tagList, setTagList] = useState([]);
 
   const handleClickAddButton = async () => {
 
@@ -106,7 +107,10 @@ function Registration() {
           </div>
           <div>
             <div>タグ一覧</div>
-            {checkTag}
+            <CheckTag
+              setTagList={setTagList}
+              tagList={tagList}
+            />
           </div>
         </div>
         <div className='buttons'>
