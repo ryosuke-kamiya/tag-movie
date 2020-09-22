@@ -3,7 +3,7 @@ import React from 'react';
 import * as firebase from 'firebase';
 
 // const [tagList, setTagList] = useState([]);使うときは親の方にこれを追加してくだせぇ
-const CheckTag =(props)=> {
+const CheckTag = props => {
   const {tagList, setTagList, disabled} = props
   const db = firebase.firestore();
   db.collection('tagList').onSnapshot((querySnapshot) => {

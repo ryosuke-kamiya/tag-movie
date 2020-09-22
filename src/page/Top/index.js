@@ -22,7 +22,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 function Top() {
- 
+
   const [movies, setMovies] = useState([]);
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
@@ -225,10 +225,13 @@ function Top() {
   })
 
   const Pager = () => {
+
     if(!search){
       let arrayAllPage = [];
 
-      for(let i = 0; i < Math.ceil(allData.length/pageNum); i++){
+      const loopNum = Math.ceil(allData.length/pageNum);
+
+      for(let i = 0; i < loopNum; i++){
         arrayAllPage.push(i)
       }
   
@@ -263,6 +266,7 @@ function Top() {
   }
 
   const handleMovePage = async (page) => {
+    console.log('handlemove')
     const db = firebase.firestore();
       if(page === 1){
         db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
