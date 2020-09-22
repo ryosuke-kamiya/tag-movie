@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useState} from 'react';
 // import styles from '../../styles/index.scss';
 import * as firebase from 'firebase';
 
-// const [tagList, setTagList] = useState([]);使うときは親の方にこれを追加してくだせぇ
 const CheckTag = props => {
-  const {tagList, setTagList, disabled} = props
   const db = firebase.firestore();
+  const [tagList, setTagList] = useState([]);
+
+  const {disabled} = props
   db.collection('tagList').onSnapshot((querySnapshot) => {
     const _tagList = querySnapshot.docs.map(doc => {
       return{

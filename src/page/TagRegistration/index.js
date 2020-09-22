@@ -10,7 +10,6 @@ import { Footer } from '../../_parts/Footer/index';
 
 function TagRegistration() {
   const [addTag, setAddTag] = useState('');
-  const [tagList, setTagList] = useState([]);
 
   const { history } = useRouter();
 
@@ -50,8 +49,6 @@ function TagRegistration() {
         <div>
           <div>タグ一覧</div>
           <CheckTag
-            setTagList={setTagList}
-            tagList={tagList}
             disabled={true}
           />
         </div>

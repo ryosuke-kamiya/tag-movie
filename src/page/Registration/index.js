@@ -107,10 +107,7 @@ function Registration() {
           </div>
           <div>
             <div>タグ一覧</div>
-            <CheckTag
-              setTagList={setTagList}
-              tagList={tagList}
-            />
+            <CheckTag />
           </div>
         </div>
         <div className='buttons'>

@@ -22,12 +22,11 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 function Top() {
-
+console.log("name");
   const [movies, setMovies] = useState([]);
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [allData, setAllData] = useState([]);
-  const [tagList, setTagList] = useState([]);
   // const [searchAllData, setSearchAllData] = useState([]);
   const pageNum = 10;
 
@@ -330,6 +329,7 @@ function Top() {
       });
       setAllData(_allData)
     })
+
     return() => {
       unsubscribe();
     }
@@ -351,10 +351,7 @@ function Top() {
               />
               <button onClick={()=>titleSearchButton()}>タイトル検索</button>
             </div>
-              <CheckTag
-                setTagList={setTagList}
-                tagList={tagList}
-              />
+              <CheckTag />
             <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
           </div>
