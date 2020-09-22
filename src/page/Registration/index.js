@@ -27,15 +27,26 @@ function Registration() {
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
   const { history } = useRouter();
+  const LinkValidation = /^(https):\/\/([\w-]+\.)+[\w-]+(\/[\w-./?%&=]*)?$/
+  const amazonLinkValidation = /^(https:\/\/www.amazon.co.jp)/
 
   const handleClickAddButton = async () => {
 
     if (!title) {
-      alert('タイトルが空です');
+      alert('タイトルが空です。');
       return;
     }
+
     if (!link) {
-      alert('リンクが空です');
+      alert('リンクが空です。');
+      return;
+    }
+
+    if(!LinkValidation.test(link)){
+      alert('正しいリンクを入力してください。');
+      return;
+    }else if(!amazonLinkValidation.test(link)){
+      alert('Amazonのリンクを入力してください。');
       return;
     }
 
