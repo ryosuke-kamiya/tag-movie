@@ -28,6 +28,7 @@ function Top() {
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [allData, setAllData] = useState([]);
+  // const [searchAllData, setSearchAllData] = useState([]);
   const pageNum = 10;
 
   const titleSearchButton = async ()=> {
@@ -39,7 +40,7 @@ function Top() {
     .collection('movies')
     // .orderBy('title')これがあるとなぜかエラーになる
     .where( 'title', '==', title)
-    .limit(pageNum)
+    // .limit(pageNum)
     .get();
 
     const _movies = [];
@@ -50,6 +51,14 @@ function Top() {
         ...doc.data()
       });
     })
+
+    //ページャーで使うデータ。orderByとlimit問題が解決しないとだめ。
+    // db.collection('movies').where( 'title', '==', title).onSnapshot((querySnapshot) => {
+    //   const _SearchAllData = querySnapshot.docs.map((doc, index) => {
+    //     return(index)
+    //   });
+    //   setSearchAllData(_SearchAllData)
+    // })
 
     setMovies(_movies);
     setSearch(true)
@@ -205,7 +214,7 @@ function Top() {
     return(
         <li key={index} className='movieCard'>
             <div>{movie.title}</div>
-            <a href={movie.link} className='movieLinkButton' target="_blank" rel="noopener noreferrer" >リンク</a>
+            <a href={movie.link} className='movieLinkButton' target="_blank" rel="noopener noreferrer" >Amazon</a>
             {movie.tag &&
               <ul className='tags'>{movie.tag.map((tag, index2) => (
                   <li key={index2} className='tag'>{tag}</li>
@@ -216,28 +225,41 @@ function Top() {
   })
 
   const Pager = () => {
-    //ここ何とかしたいけど、function使わずにいけんの？？？
-    if(search) return (<ul><li></li></ul>);//検索時のページャーはいったん諦めた。
+    if(!search){
+      let arrayAllPage = [];
 
-    let arrayI = [];
-
-    for(let i = 0; i < Math.ceil(allData.length/pageNum); i++){
-      arrayI.push(i)
+      for(let i = 0; i < Math.ceil(allData.length/pageNum); i++){
+        arrayAllPage.push(i)
+      }
+  
+      return(
+        <Fragment>
+          <ul className='pagerList'>
+          {
+            arrayAllPage.map((page, index) => {
+              return(
+                <li className='pager' key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
+              )
+            })
+          }
+          </ul>
+        </Fragment>
+      )
+    }else{
+      return(
+        <Fragment>
+          <ul className='pagerList'>
+          {/* {
+            searchAllData.map((page, index) => {
+              return(
+                <li className='pager' key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
+              )
+            })
+          } */}
+          </ul>
+        </Fragment>
+      )
     }
-
-    return(
-      <Fragment>
-        <ul className='pagerList'>
-        {
-          arrayI.map((page, index) => {
-            return(
-              <li className='pager' key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
-            )
-          })
-        }
-        </ul>
-      </Fragment>
-    )
   }
 
   const handleMovePage = async (page) => {
