@@ -7,31 +7,29 @@ import { TagRegistration } from './page/TagRegistration';
 function Routes() {
 
  return(
-     <Route>
-        <Switch>
-            <Route
-                exact
-                path="/"
-                render={() => {
-                    return <Top />
-                }}
-            />
-            <Route
-                exact
-                path="/registration"
-                render={() => {
-                    return <Registration />
-                }}
-            />
-            <Route
-                exact
-                path="/tagRegistration"
-                render={() => {
-                    return <TagRegistration />
-                }}
-            />
-        </Switch>
-     </Route>
+    <Switch>
+        <Route
+            exact
+            path="/"
+            render={() => {
+                return <Top />
+            }}
+        />
+        <Route
+            exact
+            path="/registration"
+            render={() => {
+                return <Registration />
+            }}
+        />
+        <Route
+            exact
+            path="/tagRegistration"
+            render={() => {
+                return <TagRegistration />
+            }}
+        />
+    </Switch>
  )
 
 }
