@@ -15,6 +15,7 @@ function Registration() {
   const [link, setLink] = useState('');
   const { history } = useRouter();
   const amazonLinkValidation = /^(https:\/\/www.amazon.co.jp)/
+  const db = firebase.firestore();
 
   const handleClickAddButton = async () => {
 
@@ -32,8 +33,6 @@ function Registration() {
       alert('Amazonのリンクを入力してください。');
       return;
     }
-
-    const db = firebase.firestore();
 
     const snapshot = await db
     .collection('movies')

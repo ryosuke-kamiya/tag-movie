@@ -24,16 +24,19 @@ firebase.initializeApp(firebaseConfig);
 function Top() {
 
   const [movies, setMovies] = useState([]);
+  const [searchMovies, setSearchMovies] = useState([]);
+  console.log('movies'+ movies.length);
+  console.log('searchMovies'+ searchMovies.length);
+
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
-  const [allData, setAllData] = useState([]);
+  const [allData, setAllData] = useState([]);//ページャーの省略ができたら使える。
   const [currentIndex, setCurrentIndex] = useState(1)
-  // const [searchAllData, setSearchAllData] = useState([]);
   const pageNum = 10;
+  const db = firebase.firestore();
 
   const titleSearchButton = async ()=> {
     if(title === '') return;
-    const db = firebase.firestore();
 
     // collection取得
     const snapshot = await db
@@ -52,7 +55,7 @@ function Top() {
       });
     })
 
-    //ページャーで使うデータ。orderByとlimit問題が解決しないとだめ。
+    //ページャーで使うデータ。orderByとlimit問題が解決しないとだめ。と思ってたけど、タイトルで検索して何件もヒットすることはないんでいらないです。
     // db.collection('movies').where( 'title', '==', title).onSnapshot((querySnapshot) => {
     //   const _SearchAllData = querySnapshot.docs.map((doc, index) => {
     //     return(index)
@@ -66,7 +69,6 @@ function Top() {
 
 
   const tagSearchButton = async ()=> {
-    const db = firebase.firestore();
     const tags = [];
     const tag = document.getElementsByName('tag');
 
@@ -81,7 +83,7 @@ function Top() {
 
     if(check === 0) return;
     if(check > 9){
-      alert('タグゆるり検索は10以上のタグを同時に検索できません。')
+      alert('タグ検索は10以上のタグを同時に検索できません。')
       return;
     }
 
@@ -126,12 +128,14 @@ function Top() {
           _movies[okNum]
         )
       }
-    setMovies(ok_movies)
+
+    const first = ok_movies.slice(0, 10)
+    setMovies(first)
+    setSearchMovies(ok_movies)
     setSearch(true)
   };
 
   const resetSearchButton = () => {
-    const db = firebase.firestore();
     db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
       const _movies = querySnapshot.docs.map(doc => {
         return{
@@ -168,7 +172,6 @@ function Top() {
 //       newData['age'] = parseInt(age,10);
 //     }
 //     try{
-//       const db = firebase.firestore();
 //       await db.collection('movies').doc(documentID).update(newData);
 //       setUsername('')
 //       setAge('')
@@ -186,7 +189,6 @@ function Top() {
 //   }
 
 //   const handleClickDeleteButton = async () => {
-//     // const db = firebase.firestore();
 //     // db.collection('movies').doc('D6AcCpdUnuxNQNbrrhP0').delete().then(function () {
 //     //   console.log("Document successfully deleted")
 //     // }).catch(function (error) {
@@ -199,7 +201,6 @@ function Top() {
 //     }
 
 //     try{
-//       const db = firebase.firestore();
 //       await db.collection('movies').doc(documentID).delete();
 //       setUsername('')
 //       setAge('')
@@ -208,21 +209,6 @@ function Top() {
 //       console.log(error);
 //     }
 //   }
-
-  const userListItems = movies.map((movie, index) => {
-
-    return(
-        <li key={index} className='movieCard'>
-            <div>{movie.title}</div>
-            <a href={movie.link} className='movieLinkButton' target="_blank" rel="noopener noreferrer" >Amazon</a>
-            {movie.tag &&
-              <ul className='tags'>{movie.tag.map((tag, index2) => (
-                  <li key={index2} className='tag'>{tag}</li>
-              ))}</ul>
-            }
-        </li>
-    )
-  })
 
   const Pager = () => {
 
@@ -265,16 +251,22 @@ function Top() {
         </Fragment>
       )
     }else{
+      let arraySearchPage = [];
+
+      for(let i = 0; i < Math.ceil(searchMovies.length/pageNum); i++){
+        arraySearchPage.push(i)
+      }
+
       return(
         <Fragment>
           <ul className='pagerList'>
-          {/* {
-            searchAllData.map((page, index) => {
+          {
+            arraySearchPage.map((data, index) => {
               return(
-                <li className='pager' key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
+                <li className='pager' key={index} onClick={()=> handleMovePage(data + 1)}>{data + 1}</li>
               )
             })
-          } */}
+          }
           </ul>
         </Fragment>
       )
@@ -282,8 +274,7 @@ function Top() {
   }
 
   const handleMovePage = async (page) => {
-
-    const db = firebase.firestore();
+    if(!search){
       if(page === 1){
         db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
           const _movies = querySnapshot.docs.map(doc => {
@@ -322,13 +313,39 @@ function Top() {
       })
 
       setMovies(_movies);
-      setCurrentIndex(page)
+    }else{
+      if(page === 1){
+        const _searchMovies = searchMovies.slice(0, pageNum-1);
+        setMovies(_searchMovies);
+        setCurrentIndex(page)
+        return
+      }
+
+      const start = (page - 1) * pageNum;
+      const end = start + (pageNum - 1)
+      const _searchMovies = searchMovies.slice(start, end);
+
+      setMovies(_searchMovies);
+    }
+    setCurrentIndex(page)
   }
 
+  const movieListItems = movies.map((movie, index) => {
+
+    return(
+        <li key={index} className='movieCard'>
+            <div>{movie.title}</div>
+            <a href={movie.link} className='movieLinkButton' target="_blank" rel="noopener noreferrer" >Amazon</a>
+            {movie.tag &&
+              <ul className='tags'>{movie.tag.map((tag, index2) => (
+                  <li key={index2} className='tag'>{tag}</li>
+              ))}</ul>
+            }
+        </li>
+    )
+  })
 
   useEffect(() => {
-
-    const db = firebase.firestore();
     const unsubscribe = db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
       const _movies = querySnapshot.docs.map(doc => {
         return{
@@ -338,7 +355,7 @@ function Top() {
       });
       setMovies(_movies)
     })
-    
+
     db.collection('movies').onSnapshot((querySnapshot) => {
       const _allData = querySnapshot.docs.map(doc => {
         return{
@@ -352,7 +369,7 @@ function Top() {
     return() => {
       unsubscribe();
     }
-  },[])
+  },[])//dbまとめたから？？？
 
   return (
     <Fragment>
@@ -385,7 +402,7 @@ function Top() {
             />
           </div>
           <ul className="movieCards">
-            {userListItems}
+            {movieListItems}
           </ul>
           <Pager />
           <div className='page-top'><a href="#">▲</a></div>
