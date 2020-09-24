@@ -25,12 +25,9 @@ function Top() {
 
   const [movies, setMovies] = useState([]);
   const [searchMovies, setSearchMovies] = useState([]);
-  console.log('movies'+ movies.length);
-  console.log('searchMovies'+ searchMovies.length);
-
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
-  const [allData, setAllData] = useState([]);//ページャーの省略ができたら使える。
+  const [allData, setAllData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1)
   const pageNum = 10;
   const db = firebase.firestore();
@@ -64,7 +61,8 @@ function Top() {
     // })
 
     setMovies(_movies);
-    setSearch(true)
+    setSearch(true);
+    setCurrentIndex(1);
   };
 
 
@@ -133,6 +131,7 @@ function Top() {
     setMovies(first)
     setSearchMovies(ok_movies)
     setSearch(true)
+    setCurrentIndex(1);
   };
 
   const resetSearchButton = () => {
@@ -155,6 +154,7 @@ function Top() {
         tag[i].checked = false
       }
     }
+    setCurrentIndex(1);
   }
 
 //   const handleClickUpdateButton = async () => {
@@ -215,14 +215,28 @@ function Top() {
     if(!search){
       let arrayAllPage = [];
 
-      // const loopNum = Math.ceil(allData.length/pageNum);//本当はここのコメントアウトもとる。
+      const loopNum = Math.ceil(allData.length/pageNum);
 
-      for(let i = 0; i < 8; i++){// for(let i = 0; i < loopNum; i++){ 本当は、こうだけど、一時的にページャーが無限に増えるので８にした。
+      for(let i = 0; i < loopNum; i++){
         arrayAllPage.push(i)
+      }
+
+      let centerPage = []
+      if(currentIndex === 1){//１ページ目
+        centerPage = arrayAllPage.slice(currentIndex, currentIndex+3);
+      }else if(currentIndex-2 < 1){//２ページ目
+        centerPage = arrayAllPage.slice(currentIndex-1, currentIndex+2);
+      }else if(loopNum === currentIndex){//最終ページ
+        centerPage = arrayAllPage.slice(currentIndex-4, currentIndex-1);
+      }else if(loopNum <= currentIndex+1){
+        centerPage = arrayAllPage.slice(currentIndex-3, currentIndex);
+      }else{
+        centerPage = arrayAllPage.slice(currentIndex-2, currentIndex+1);//通常時
       }
   
       return(
         <Fragment>
+        {loopNum > 1 &&
           <ul className='pagerList'>
             <li className={cx('pager', {
                   'pagerDisabled': currentIndex <= 1
@@ -231,14 +245,31 @@ function Top() {
                 if(currentIndex <= 1) return;
                 handleMovePage(currentIndex - 1)
               }}
-              >＜</li>
+              >＜
+            </li>
+            <li className={cx('pager', {'currentPage': currentIndex === 1})}
+                onClick={()=> handleMovePage(1)}
+             >
+            1
+            </li>
+          {loopNum > 6 && currentIndex > 3 &&
+            <li className='pagerAbridge'>...</li>
+          }
           {
-            arrayAllPage.map((page, index) => {
+            centerPage.map((page, index) => {
               return(
                 <li className={cx('pager', {'currentPage': currentIndex === page + 1})} key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
               )
             })
           }
+          {loopNum > 6 && currentIndex < loopNum - 2 &&
+            <li className='pagerAbridge'>...</li>
+          }
+          <li className={cx('pager', {'currentPage': currentIndex === loopNum})}
+                onClick={()=> handleMovePage(loopNum)}
+             >
+            {loopNum}
+          </li>
           <li className={cx('pager', {
                 'pagerDisabled': currentIndex >= arrayAllPage.pop() + 1
               })}
@@ -248,26 +279,77 @@ function Top() {
               }}
               >＞</li>
           </ul>
+        }
         </Fragment>
       )
     }else{
       let arraySearchPage = [];
 
-      for(let i = 0; i < Math.ceil(searchMovies.length/pageNum); i++){
+      let loopNum = Math.ceil(searchMovies.length/pageNum);
+
+      for(let i = 0; i < loopNum; i++){
         arraySearchPage.push(i)
+      }
+
+      let centerPage = []
+      if(currentIndex === 1){//１ページ目
+        centerPage = arraySearchPage.slice(currentIndex, currentIndex+3);
+      }else if(currentIndex-2 < 1){//２ページ目
+        centerPage = arraySearchPage.slice(currentIndex-1, currentIndex+2);
+      }else if(loopNum === currentIndex){//最終ページ
+        centerPage = arraySearchPage.slice(currentIndex-4, currentIndex-1);
+      }else if(loopNum <= currentIndex+1){
+        centerPage = arraySearchPage.slice(currentIndex-3, currentIndex);
+      }else{
+        centerPage = arraySearchPage.slice(currentIndex-2, currentIndex+1);//通常時
       }
 
       return(
         <Fragment>
+           {loopNum > 1 &&
           <ul className='pagerList'>
+            <li className={cx('pager', {
+                  'pagerDisabled': currentIndex <= 1
+                })}
+              onClick={() => {
+                if(currentIndex <= 1) return;
+                handleMovePage(currentIndex - 1)
+              }}
+              >＜
+            </li>
+            <li className={cx('pager', {'currentPage': currentIndex === 1})}
+                onClick={()=> handleMovePage(1)}
+             >
+            1
+            </li>
+          {loopNum > 6 && currentIndex > 3 &&
+            <li className='pagerAbridge'>...</li>
+          }
           {
-            arraySearchPage.map((data, index) => {
+            centerPage.map((page, index) => {
               return(
-                <li className='pager' key={index} onClick={()=> handleMovePage(data + 1)}>{data + 1}</li>
+                <li className={cx('pager', {'currentPage': currentIndex === page + 1})} key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
               )
             })
           }
+          {loopNum > 6 && currentIndex < loopNum - 2 &&
+            <li className='pagerAbridge'>...</li>
+          }
+          <li className={cx('pager', {'currentPage': currentIndex === loopNum})}
+                onClick={()=> handleMovePage(loopNum)}
+             >
+            {loopNum}
+          </li>
+          <li className={cx('pager', {
+                'pagerDisabled': currentIndex >= arraySearchPage.pop() + 1
+              })}
+              onClick={() => {
+                if(currentIndex > arraySearchPage.pop() + 1) return;//うまくいってるけどなんでや。これだと一歩手前で止まらんのか、謎。
+                handleMovePage(currentIndex + 1)
+              }}
+              >＞</li>
           </ul>
+        }
         </Fragment>
       )
     }

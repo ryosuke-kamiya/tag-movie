@@ -126,7 +126,10 @@
             height: 40px;
             line-height: 40px;
             box-sizing: border-box;
-
+        }
+        .pagerAbridge {
+            line-height: 30px;
+            margin-right: 5px;
         }
         .currentPage {
             background: #67c5ff;
