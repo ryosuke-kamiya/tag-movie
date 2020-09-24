@@ -292,7 +292,9 @@ function Top() {
       }
 
       let centerPage = []
-      if(currentIndex === 1){//１ページ目
+      if(loopNum <= 5){//maxが５ページ以下
+        centerPage = arraySearchPage.slice(1, loopNum-1);
+      }else if(currentIndex === 1){//１ページ目
         centerPage = arraySearchPage.slice(currentIndex, currentIndex+3);
       }else if(currentIndex-2 < 1){//２ページ目
         centerPage = arraySearchPage.slice(currentIndex-1, currentIndex+2);
