@@ -14,11 +14,37 @@ function TagRegistration() {
 
   const { history } = useRouter();
 
+  const db = firebase.firestore();
+
   const handleClickAddButton = async () => {
-    const db = firebase.firestore()
+
+    if (!addTag) {
+      alert('タグが空です。');
+      return;
+    }
+
+    const snapshot = await db
+    .collection('tagList')
+    .where( 'tag', '==', addTag)
+    .get();
+
+    const sameTag = [];
+
+    snapshot.forEach(doc => {
+      sameTag.push({
+        tagId: doc.id,
+      });
+    })
+
+    if(sameTag.length >= 1){
+      alert('同名のタグが登録されています。');
+      return;
+    }
+
     await db.collection('tagList').add({
       tag: addTag
     })
+
     setAddTag('');
   }
 
