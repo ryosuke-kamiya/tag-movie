@@ -215,7 +215,7 @@ function Top() {
     if(!search){
       let arrayAllPage = [];
 
-      const loopNum = Math.ceil(allData.length/pageNum);
+      const loopNum = Math.ceil(allData.length/pageNum);//pageNumは表示する数
 
       for(let i = 0; i < loopNum; i++){
         arrayAllPage.push(i)
