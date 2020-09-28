@@ -29,6 +29,7 @@ function Top() {
   const [search, setSearch] = useState(false);
   const [allData, setAllData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1)
+  const [searchNum, setSearchNum] = useState()
   const pageNum = 10;
   const db = firebase.firestore();
 
@@ -63,6 +64,7 @@ function Top() {
     setMovies(_movies);
     setSearch(true);
     setCurrentIndex(1);
+    setSearchNum(_movies.length)
   };
 
 
@@ -132,6 +134,7 @@ function Top() {
     setSearchMovies(ok_movies)
     setSearch(true)
     setCurrentIndex(1);
+    setSearchNum(ok_movies.length)
   };
 
   const resetSearchButton = () => {
@@ -474,6 +477,7 @@ function Top() {
               <CheckTag />
             <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
+            <div className='hitNum'>{search ? searchNum : allData.length}件ヒット</div>
           </div>
           <div className='addButtonWrapper'>
             <BlueButton
