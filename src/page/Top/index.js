@@ -137,9 +137,11 @@ function Top() {
       }
     }
     setCurrentIndex(1);
+    setSearchNum(0)
   }
 
   const Pager = () => {
+    if(!search) return null
       let arraySearchPage = [];
 
       let loopNum = Math.ceil(searchMovies.length/pageNum);
@@ -211,7 +213,6 @@ function Top() {
         }
         </Fragment>
       )
-    // }
   }
 
   const handleMovePage = async (page) => {
