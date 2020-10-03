@@ -58,23 +58,6 @@ function Registration() {
       }
     }
 
-
-    // await db
-    // .collection('movies')
-    // .doc('1')
-    // .set({
-    //   // name: "dammy",
-    //   age: 99
-    // },{merge: true});//第二引数のmergeで全体上書きを防ぎ、追加にする。
-
-    // const ref = await db.collection('movies').add({
-    //   name: "田中",
-    //   age: 100
-    // })
-    // const snapShot = await ref.get();
-    // const data = snapShot.data();
-    // console.log(ref.id, data);
-
     await db.collection('movies').add({
       title: title,
       link: link,

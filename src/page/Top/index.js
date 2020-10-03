@@ -27,7 +27,6 @@ function Top() {
   const [searchMovies, setSearchMovies] = useState([]);
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
-  // const [allData, setAllData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1)
   const [searchNum, setSearchNum] = useState(0)
   const { setModal } = useModal()
@@ -37,12 +36,9 @@ function Top() {
   const titleSearchButton = async ()=> {
     if(title === '') return;
 
-    // collection取得
     const snapshot = await db
     .collection('movies')
-    // .orderBy('title')これがあるとなぜかエラーになる
     .where( 'title', '==', title)
-    // .limit(pageNum)
     .get();
 
     const _movies = [];
@@ -53,14 +49,6 @@ function Top() {
         ...doc.data()
       });
     })
-
-    //ページャーで使うデータ。orderByとlimit問題が解決しないとだめ。と思ってたけど、タイトルで検索して何件もヒットすることはないんでいらないです。
-    // db.collection('movies').where( 'title', '==', title).onSnapshot((querySnapshot) => {
-    //   const _SearchAllData = querySnapshot.docs.map((doc, index) => {
-    //     return(index)
-    //   });
-    //   setSearchAllData(_SearchAllData)
-    // })
 
   setMovies(_movies);
     setSearch(true);
@@ -92,7 +80,6 @@ function Top() {
     .collection('movies')
     .where( 'tag', 'array-contains-any', tags)
     .orderBy('title')
-    // .limit(pageNum)
     .get();
 
 
@@ -116,7 +103,6 @@ function Top() {
         }
       }
       if(tags.length === okCount){
-        // console.log("こいつ合格です。" + i);
         okList.push(i)
       }
     }
@@ -139,15 +125,6 @@ function Top() {
   };
 
   const resetSearchButton = () => {
-    //無駄に処理が重たくなるので、一覧表示はなし
-    // db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
-    //   const _movies = querySnapshot.docs.map(doc => {
-    //     return{
-    //       movieID: doc.id,
-    //       ...doc.data()
-    //     }
-    //   });
-    // })
     setMovies([])
     
     setTitle('')
@@ -162,132 +139,7 @@ function Top() {
     setCurrentIndex(1);
   }
 
-//   const handleClickUpdateButton = async () => {
-
-//     if(!documentID){
-//       alert('documentIDをセットしてください');
-//       return;
-//     }
-
-//     const newData = {};
-//     if(userName){
-//       newData['name'] = userName;
-//     }
-//     if(age){
-//       newData['age'] = parseInt(age,10);
-//     }
-//     try{
-//       await db.collection('movies').doc(documentID).update(newData);
-//       setUsername('')
-//       setAge('')
-//       setDocumentID('')
-//     }catch(error){
-//       console.log(error);
-//     }
-
-
-
-//     // await db.collection('movies').doc('uQhbXB9RYSLTHhxG1zEs').update({
-//     //   name: '田中でした',
-//     //   age: 33
-//     // })
-//   }
-
-//   const handleClickDeleteButton = async () => {
-//     // db.collection('movies').doc('D6AcCpdUnuxNQNbrrhP0').delete().then(function () {
-//     //   console.log("Document successfully deleted")
-//     // }).catch(function (error) {
-//     //   console.error("error removing document :", error);
-//     // })
-
-//     if(!documentID){
-//       alert('documentIDをセットしてください');
-//       return;
-//     }
-
-//     try{
-//       await db.collection('movies').doc(documentID).delete();
-//       setUsername('')
-//       setAge('')
-//       setDocumentID('')
-//     }catch(error){
-//       console.log(error);
-//     }
-//   }
-
   const Pager = () => {
-
-    // if(!search){ //最初の一覧表示がなくなったので、この分岐もなし
-    //   let arrayAllPage = [];
-
-    //   const loopNum = Math.ceil(allData.length/pageNum);//pageNumは表示する数
-
-    //   for(let i = 0; i < loopNum; i++){
-    //     arrayAllPage.push(i)
-    //   }
-
-    //   let centerPage = []
-    //   if(currentIndex === 1){//１ページ目
-    //     centerPage = arrayAllPage.slice(currentIndex, currentIndex+3);
-    //   }else if(currentIndex-2 < 1){//２ページ目
-    //     centerPage = arrayAllPage.slice(currentIndex-1, currentIndex+2);
-    //   }else if(loopNum === currentIndex){//最終ページ
-    //     centerPage = arrayAllPage.slice(currentIndex-4, currentIndex-1);
-    //   }else if(loopNum <= currentIndex+1){
-    //     centerPage = arrayAllPage.slice(currentIndex-3, currentIndex);
-    //   }else{
-    //     centerPage = arrayAllPage.slice(currentIndex-2, currentIndex+1);//通常時
-    //   }
-  
-    //   return(
-    //     <Fragment>
-    //     {loopNum > 1 &&
-    //       <ul className='pagerList'>
-    //         <li className={cx('pager', {
-    //               'pagerDisabled': currentIndex <= 1
-    //             })}
-    //           onClick={() => {
-    //             if(currentIndex <= 1) return;
-    //             handleMovePage(currentIndex - 1)
-    //           }}
-    //           >＜
-    //         </li>
-    //         <li className={cx('pager', {'currentPage': currentIndex === 1})}
-    //             onClick={()=> handleMovePage(1)}
-    //          >
-    //         1
-    //         </li>
-    //       {loopNum > 6 && currentIndex > 3 &&
-    //         <li className='pagerAbridge'>...</li>
-    //       }
-    //       {
-    //         centerPage.map((page, index) => {
-    //           return(
-    //             <li className={cx('pager', {'currentPage': currentIndex === page + 1})} key={index} onClick={()=> handleMovePage(page + 1)}>{page + 1}</li>
-    //           )
-    //         })
-    //       }
-    //       {loopNum > 6 && currentIndex < loopNum - 2 &&
-    //         <li className='pagerAbridge'>...</li>
-    //       }
-    //       <li className={cx('pager', {'currentPage': currentIndex === loopNum})}
-    //             onClick={()=> handleMovePage(loopNum)}
-    //          >
-    //         {loopNum}
-    //       </li>
-    //       <li className={cx('pager', {
-    //             'pagerDisabled': currentIndex >= arrayAllPage.pop() + 1
-    //           })}
-    //           onClick={() => {
-    //             if(currentIndex > arrayAllPage.pop() + 1) return;//うまくいってるけどなんでや。これだと一歩手前で止まらんのか、謎。
-    //             handleMovePage(currentIndex + 1)
-    //           }}
-    //           >＞</li>
-    //       </ul>
-    //     }
-    //     </Fragment>
-    //   )
-    // }else{
       let arraySearchPage = [];
 
       let loopNum = Math.ceil(searchMovies.length/pageNum);
@@ -442,32 +294,6 @@ function Top() {
     )
   })
 
-  // useEffect(() => {  //無駄に処理が重たくなるので、一覧表示はなし
-  //   const unsubscribe = db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
-  //     const _movies = querySnapshot.docs.map(doc => {
-  //       return{
-  //         movieID: doc.id,
-  //         ...doc.data()
-  //       }
-  //     });
-  //    setMovies(_movies)
-  //   })
-
-  //   db.collection('movies').onSnapshot((querySnapshot) => {
-  //     const _allData = querySnapshot.docs.map(doc => {
-  //       return{
-  //         movieID: doc.id,
-  //         ...doc.data()
-  //       }
-  //     });
-  //     setAllData(_allData)
-  //   })
-
-  //   return() => {
-  //     unsubscribe();
-  //   }
-  // },[db])
-
   return (
     <Fragment>
       <Header/>
@@ -488,7 +314,6 @@ function Top() {
             <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
             <div className='hitNum'>{searchNum}件ヒット</div>
-            {/* <div className='hitNum'>{search ? searchNum : allData.length}件ヒット</div> */}{/* 一覧表示をしていた時 */}
           </div>
           <div className='addButtonWrapper'>
             <BlueButton
