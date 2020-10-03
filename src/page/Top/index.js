@@ -23,7 +23,7 @@ firebase.initializeApp(firebaseConfig);
 
 function Top() {
 
-  const [movies, setMovies] = useState([]);
+  const [movies,setMovies] = useState([]);
   const [searchMovies, setSearchMovies] = useState([]);
   const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
@@ -62,7 +62,7 @@ function Top() {
     //   setSearchAllData(_SearchAllData)
     // })
 
-    setMovies(_movies);
+  setMovies(_movies);
     setSearch(true);
     setCurrentIndex(1);
     setSearchNum(_movies.length)
@@ -131,7 +131,7 @@ function Top() {
       }
 
     const first = ok_movies.slice(0, 10)
-    setMovies(first)
+  setMovies(first)
     setSearchMovies(ok_movies)
     setSearch(true)
     setCurrentIndex(1);
@@ -139,18 +139,19 @@ function Top() {
   };
 
   const resetSearchButton = () => {
-    db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
-      const _movies = querySnapshot.docs.map(doc => {
-        return{
-          movieID: doc.id,
-          ...doc.data()
-        }
-      });
-      setMovies(_movies)
-      setTitle('')
-      setSearch(false)
-    })
-
+    //無駄に処理が重たくなるので、一覧表示はなし
+    // db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
+    //   const _movies = querySnapshot.docs.map(doc => {
+    //     return{
+    //       movieID: doc.id,
+    //       ...doc.data()
+    //     }
+    //   });
+    // })
+    setMovies([])
+    
+    setTitle('')
+    setSearch(false)
     const tag = document.getElementsByName('tag');
 
     for (let i = 0; i < tag.length; i++){
@@ -371,7 +372,7 @@ function Top() {
               ...doc.data()
             }
           });
-          setMovies(_movies)
+        setMovies(_movies)
         })
         setCurrentIndex(page)
         return
@@ -400,11 +401,11 @@ function Top() {
         });
       })
 
-      setMovies(_movies);
+    setMovies(_movies);
     }else{
       if(page === 1){
         const _searchMovies = searchMovies.slice(0, pageNum-1);
-        setMovies(_searchMovies);
+      setMovies(_searchMovies);
         setCurrentIndex(page)
         return
       }
@@ -413,7 +414,7 @@ function Top() {
       const end = start + (pageNum - 1)
       const _searchMovies = searchMovies.slice(start, end);
 
-      setMovies(_searchMovies);
+    setMovies(_searchMovies);
     }
     setCurrentIndex(page)
   }
@@ -441,31 +442,31 @@ function Top() {
     )
   })
 
-  useEffect(() => {
-    const unsubscribe = db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
-      const _movies = querySnapshot.docs.map(doc => {
-        return{
-          movieID: doc.id,
-          ...doc.data()
-        }
-      });
-      setMovies(_movies)
-    })
+  // useEffect(() => {  //無駄に処理が重たくなるので、一覧表示はなし
+  //   const unsubscribe = db.collection('movies').orderBy('title').limit(pageNum).onSnapshot((querySnapshot) => {
+  //     const _movies = querySnapshot.docs.map(doc => {
+  //       return{
+  //         movieID: doc.id,
+  //         ...doc.data()
+  //       }
+  //     });
+  //    setMovies(_movies)
+  //   })
 
-    db.collection('movies').onSnapshot((querySnapshot) => {
-      const _allData = querySnapshot.docs.map(doc => {
-        return{
-          movieID: doc.id,
-          ...doc.data()
-        }
-      });
-      setAllData(_allData)
-    })
+  //   db.collection('movies').onSnapshot((querySnapshot) => {
+  //     const _allData = querySnapshot.docs.map(doc => {
+  //       return{
+  //         movieID: doc.id,
+  //         ...doc.data()
+  //       }
+  //     });
+  //     setAllData(_allData)
+  //   })
 
-    return() => {
-      unsubscribe();
-    }
-  },[db])
+  //   return() => {
+  //     unsubscribe();
+  //   }
+  // },[db])
 
   return (
     <Fragment>
