@@ -1,10 +1,13 @@
 import React from 'react';
 import { Routes } from './route.js';
+import { ModalProvider } from './contexts';
 
 function App() {
 
- return(//このrouteの上にproviderが必要なら書く
-   <Routes />
+ return(
+   <ModalProvider>
+    <Routes />
+   </ModalProvider>
  )
 
 }

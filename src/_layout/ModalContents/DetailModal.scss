@@ -1,0 +1,139 @@
+
+.detailModal {
+    & > * {
+        margin-top: 10px;
+    }
+
+    & > *:first-child{
+        margin-top: 0;
+    }
+
+    .movieLinkButton {
+        display: inline-block;
+        padding: 0.3em 1em;
+        text-decoration: none;
+        border: solid 2px #51BD65;
+        border-radius: 3px;
+        transition: .25s all ease;
+        background: #51BD65;
+        color: white;
+    }
+
+    .movieLinkButton:hover {
+        color: #51BD65;
+        background: white;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+
+        .tag, .tagAddButton {
+            display: inline-block;
+            padding: 5px;
+            margin-right: 5px;
+            margin-top: 5px;
+            border: solid 2px #B8B8B8;
+            border-radius: 3px;
+            transition: .25s all ease;
+            background: #B8B8B8;
+            color: white;
+        }
+
+        .tagAddButton {
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    }
+
+    .addTagsBox {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+
+        .addTagBox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        input[type=checkbox]{
+            position: absolute;
+            opacity: 0;
+            z-index: -1;
+        }
+
+        input[type=checkbox]:disabled{
+            cursor: default;
+
+            & + label{
+                cursor: default;
+
+                &:hover {
+                    background-color: white;
+                }
+            }
+        }
+
+        label {
+            position: relative;
+            margin-right: 5px;
+            padding: 5px;
+            background-color: white;
+            border:solid 1px burlywood;
+            border-radius: 3px;
+            color: black;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #E6E6E6;
+            }
+
+            &:before {
+                box-sizing: border-box;
+                content: " ";
+                position: absolute;
+                top: 0.3em;
+                left: 0;
+                display: block;
+                width: 1.4em;
+                height: 1.4em;
+                border: 2px solid white;
+                border-radius: .25em;
+                z-index: -1;
+            }
+        }
+        /* Checked */
+        input[type=checkbox]:checked + label {
+            color: white;
+            background-color: #5298EB;
+            
+            &:before {
+                top: 0;
+                width: 100%;
+                height: 2em;
+                background: #5298EB;
+            }
+        }
+
+        /* Transition */
+        label,
+        label::before {
+            -webkit-transition: .25s all ease;
+            -o-transition: .25s all ease;
+            transition: .25s all ease;
+            border-radius: 3px;
+        }
+    }
+
+    @include sp {
+        .addTagsBox{
+            label {
+                &:hover {
+                    background-color: white;
+                }
+            }
+
+        }
+    }
+}

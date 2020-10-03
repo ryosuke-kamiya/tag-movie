@@ -2,11 +2,11 @@ import React, { Fragment, useState, useEffect } from 'react';
 import '../../styles/index.scss';
 import cx from 'classnames';
 import * as firebase from 'firebase';
+import { animateScroll as scroll } from 'react-scroll';
 
-import { CheckTag } from '../../_parts/tagList/index';
-import { Header } from '../../_parts/Header/index';
-import { Footer } from '../../_parts/Footer/index';
-import { BlueButton } from '../../_parts/BlueButton/index';
+import { CheckTag, Header, Footer, BlueButton } from '../../_parts';
+import { useModal } from '../../hooks/useModal';
+import { DetailModal } from '../../_layout';
 
 var firebaseConfig = {
   apiKey: "AIzaSyDrd_B1MlnDKCfRUFWqh0pJVlyBtsxbmKM",
@@ -30,6 +30,7 @@ function Top() {
   const [allData, setAllData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(1)
   const [searchNum, setSearchNum] = useState()
+  const { setModal } = useModal()
   const pageNum = 10;
   const db = firebase.firestore();
 
@@ -417,10 +418,18 @@ function Top() {
     setCurrentIndex(page)
   }
 
+  const detailModal = (movie) => {
+    setModal(
+      <DetailModal 
+        movie={movie}
+      />
+    )
+  }
+
   const movieListItems = movies.map((movie, index) => {
 
     return(
-        <li key={index} className='movieCard'>
+        <li key={index} className='movieCard' onClick={()=>detailModal(movie)}>
             <div>{movie.title}</div>
             <a href={movie.link} className='movieLinkButton' target="_blank" rel="noopener noreferrer" >Amazon</a>
             {movie.tag &&
@@ -456,12 +465,12 @@ function Top() {
     return() => {
       unsubscribe();
     }
-  },[])//dbまとめたから？？？
+  },[db])
 
   return (
     <Fragment>
       <Header/>
-        <div className={cx('Top')}>
+        <div className='Top'>
           <div className='searchForm'>
             <p>タグを選択して検索してください。</p>
             <p>あなたの気分に合わせた今観たい映画を探します。</p>
@@ -493,7 +502,7 @@ function Top() {
             {movieListItems}
           </ul>
           <Pager />
-          <div className='page-top'><a href="#">▲</a></div>
+          <div className='page-top' onClick={()=>scroll.scrollToTop()}>▲</div>
         </div>
       <Footer/>
     </Fragment>

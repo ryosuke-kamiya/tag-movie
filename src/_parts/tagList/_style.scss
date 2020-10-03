@@ -77,3 +77,14 @@
     border-radius: 3px;
     }
 }
+
+@include sp {
+    .tagsBox{
+        label {
+            &:hover {
+                background-color: white;
+            }
+        }
+
+    }
+}
