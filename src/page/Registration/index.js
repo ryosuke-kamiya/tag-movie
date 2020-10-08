@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react';
 // import styles from '../../styles/index.scss';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app'
+import 'firebase/app'
+import 'firebase/firestore'
+// import 'firebase/auth'
 import { useState } from 'react';
 import { useRouter } from '../../hooks/useRouter'
 
@@ -21,12 +24,12 @@ function Registration() {
       return;
     }
 
-    if (!link) {
-      alert('リンクが空です。');
-      return;
-    }
+    // if (!link) {
+    //   alert('リンクが空です。');
+    //   return;
+    // }
 
-    if(!amazonLinkValidation.test(link)){
+    if(link !== "" && !amazonLinkValidation.test(link)){
       alert('Amazonのリンクを入力してください。');
       return;
     }

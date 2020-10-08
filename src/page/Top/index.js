@@ -1,7 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import '../../styles/index.scss';
 import cx from 'classnames';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app'
+import 'firebase/app'
+import 'firebase/firestore'
+// import 'firebase/auth'
 import { animateScroll as scroll } from 'react-scroll';
 
 import { CheckTag, Header, Footer, BlueButton } from '../../_parts';

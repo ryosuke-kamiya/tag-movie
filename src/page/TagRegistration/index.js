@@ -1,6 +1,9 @@
 import React, { Fragment } from 'react';
 // import styles from '../../styles/index.scss';
-import * as firebase from 'firebase';
+import firebase from 'firebase/app'
+import 'firebase/app'
+import 'firebase/firestore'
+// import 'firebase/auth'
 import { useState } from 'react';
 import { useRouter } from '../../hooks/useRouter'
 
