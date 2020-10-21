@@ -28,7 +28,7 @@ function Top() {
 
   const [movies,setMovies] = useState([]);
   const [searchMovies, setSearchMovies] = useState([]);
-  const [title, setTitle] = useState('');
+  // const [title, setTitle] = useState('');
   const [search, setSearch] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(1)
   const [searchNum, setSearchNum] = useState(0)
@@ -36,28 +36,28 @@ function Top() {
   const pageNum = 10;
   const db = firebase.firestore();
 
-  const titleSearchButton = async ()=> {
-    if(title === '') return;
+  // const titleSearchButton = async ()=> {
+  //   if(title === '') return;
 
-    const snapshot = await db
-    .collection('movies')
-    .where( 'title', '==', title)
-    .get();
+  //   const snapshot = await db
+  //   .collection('movies')
+  //   .where( 'title', '==', title)
+  //   .get();
 
-    const _movies = [];
+  //   const _movies = [];
 
-    snapshot.forEach(doc => {
-      _movies.push({
-        movieId: doc.id,
-        ...doc.data()
-      });
-    })
+  //   snapshot.forEach(doc => {
+  //     _movies.push({
+  //       movieId: doc.id,
+  //       ...doc.data()
+  //     });
+  //   })
 
-  setMovies(_movies);
-    setSearch(true);
-    setCurrentIndex(1);
-    setSearchNum(_movies.length)
-  };
+  // setMovies(_movies);
+  //   setSearch(true);
+  //   setCurrentIndex(1);
+  //   setSearchNum(_movies.length)
+  // };
 
 
   const tagSearchButton = async ()=> {
@@ -130,7 +130,7 @@ function Top() {
   const resetSearchButton = () => {
     setMovies([])
     
-    setTitle('')
+    // setTitle('')
     setSearch(false)
     const tag = document.getElementsByName('tag');
 
@@ -304,8 +304,9 @@ function Top() {
         <div className='Top'>
           <div className='searchForm'>
             <p>タグを選択して検索してください。</p>
+            <p>カミヤのおすすめ映画２００選の中から</p>
             <p>あなたの気分に合わせた今観たい映画を探します。</p>
-            <div className='titleBox'>
+            {/* <div className='titleBox'>
               <input
                 type="text"
                 id="title"
@@ -313,13 +314,13 @@ function Top() {
                 onChange={(event)=>{setTitle(event.target.value)}}
               />
               <button onClick={()=>titleSearchButton()}>タイトル検索</button>
-            </div>
+            </div> */}
               <CheckTag />
             <button className='tagButton' onClick={()=>tagSearchButton()}>タグ検索</button>
             <button className='resetButton' onClick={()=>resetSearchButton()}>検索結果リセット</button>
             <div className='hitNum'>{searchNum}件ヒット</div>
           </div>
-          <div className='addButtonWrapper'>
+          {/* <div className='addButtonWrapper'>
             <BlueButton
               text='新規登録'
               link='/registration'
@@ -328,7 +329,7 @@ function Top() {
               text='新規タグ追加'
               link='/tagRegistration'
             />
-          </div>
+          </div> */}
           <ul className="movieCards">
             {movieListItems}
           </ul>
