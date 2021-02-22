@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useModal } from '../../hooks/useModal'
 
@@ -8,6 +8,20 @@ const Modal = () => {
     const closeModal = () => {
         setModal(false)
     }
+
+    const [topPosition, setTopPosition] = useState(Number)
+
+    useEffect(() => {
+        if(modal){
+            setTopPosition(document.documentElement.scrollTop)
+            document.body.style.top = - document.documentElement.scrollTop + "px"
+            document.body.classList.add('bodyFixed')
+        }else{
+            document.body.classList.remove('bodyFixed')
+            document.body.style.top = ""
+            document.documentElement.scrollTop = topPosition
+        }
+    },[modal])
 
     return modal ? (
         <div className='modal'>
